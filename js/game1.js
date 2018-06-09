@@ -42,7 +42,7 @@ function preload (){
 function create() {
   //background
   game.scale.pageAlignHorizontally = true;
-  game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+  game.scale.scaleMode = Phaser.ScaleManager.EXACT_FIT;
   //GAME.background = GAME.add.tileSprite(0,0,GAME.world.width, GAME.world.height,"bg");
   game.add.sprite(0,0,"bg");
   game.bg_cloud = game.add.sprite(0,100,"bg_cloud");
