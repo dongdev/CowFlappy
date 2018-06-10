@@ -14,7 +14,8 @@ var GAME_GRAVITY = 1900;
 var WALL_MARGIN_LEFT = 270;
 var WALL_VELOCITY = 200;
 var ROAD_MARGIN_TOP = 1416;
-var JET = 750;
+var LAND_MARGIN_TOP = 1624;
+var JET = 900;
 
 var game = new Phaser.Game(
     GAME_WIDTH,
@@ -24,8 +25,8 @@ var game = new Phaser.Game(
     STATE
 );
 
-var GAME_FONT_STYLE = {
-    fontSize: '24px',
+var FONT = {
+    fontSize: '50px',
     fill: '#fff',
     align: 'center'
 };
@@ -41,6 +42,7 @@ function preload() {
     game.load.image("meat", "assets/imgs/meat.png");
     game.load.image("bg_medium", "assets/imgs/medium.png");
     game.load.image("bg_road", "assets/imgs/road.png");
+    game.load.image("bg_land", "assets/imgs/land.png");
 }
 
 function create() {
@@ -56,12 +58,9 @@ function create() {
     game.bg_cloud = game.add.sprite(0, 100, "bg_cloud");
     game.bg_medium = game.add.sprite(0, 0, "bg_medium");
 
+    game.bg_road = game.add.sprite(0, ROAD_MARGIN_TOP, "bg_road");
+    game.bg_road1 = game.add.sprite(game.bg_road.width, game.bg_road.y, "bg_road");
 
-    game.bg_road = game.add.sprite(0, 0, "bg_road");
-    game.bg_road1 = game.add.sprite(0, 0, "bg_road");
-
-    game.bg_road.reset(0, ROAD_MARGIN_TOP);
-    game.bg_road1.reset(game.bg_road.width, game.bg_road.y);
     game.bg_medium.reset(0, GAME_HEIGHT - game.bg_road.height - game.bg_medium.height - 100);
 
     //wall
@@ -71,11 +70,28 @@ function create() {
         spaw_wall();
     }
 
+    //land
+    game.bg_land = game.add.sprite(0, LAND_MARGIN_TOP, "bg_land");
+    game.bg_land1 = game.add.sprite(game.bg_land.width, LAND_MARGIN_TOP, "bg_land");
+    game.physics.arcade.enableBody(game.bg_land, game);
+    game.physics.arcade.enableBody(game.bg_land1, game);
+    game.bg_land.body.allowGravity = false;
+    game.bg_land1.body.allowGravity = false;
+    game.bg_land.body.immovable = true;
+    game.bg_land1.body.immovable = true;
+
     //player
     game.player = game.add.sprite(GAME_WIDTH / 2, GAME_HEIGHT / 2, "player");
     game.physics.arcade.enableBody(game.player);
     game.player.body.allowGravity = false;
+    game.player.anchor.setTo(0.5, 0);
     game.player.body.collideWorldBounds = true;
+    game.player.body.offset.y = -10;
+
+    //score
+    game.score = 0;
+    game.txt_score = game.add.text(GAME_WIDTH / 2, 200, "score:" + game.score, FONT);
+    game.txt_score.anchor.setTo(0.5, 0.5);
 
     //handler touch
     game.input.onDown.add(jump, game);
@@ -86,6 +102,8 @@ function update(delta) {
     move_meat();
     collide_meat();
     collide_wall();
+
+    game.txt_score.setText("score:" + game.score);
 
 }
 function jump() {
@@ -127,6 +145,9 @@ function spaw_wall() {
     //
     wall1.body.immovable = true;
     wall2.body.immovable = true;
+    //
+    wall1.collected = false;
+    wall2.collected = false;
 
     wall2.scale.y = -1;
     wall2.body.offset.y = -wall2.body.height;
@@ -159,6 +180,10 @@ function move_wall() {
                 spawWall = true;
             }
         }
+        else if (!wall.collected && wall.x < game.player.x) {
+            game.score += .5;
+            wall.collected = true;
+        }
     })
     if (spawWall) {
         spaw_wall();
@@ -173,19 +198,35 @@ function move_meat() {
     })
 }
 function move_bg() {
-    //move road
-    if (0 > game.bg_road.x + game.bg_road.width) {
-        game.bg_road.x = game.bg_road.width - BACKGROUND_STEP * 2;
-    }
-    else {
-        game.bg_road.x -= BACKGROUND_STEP;
-    }
-    //road 1
-    if (0 > game.bg_road1.x + game.bg_road.width) {
-        game.bg_road1.x = game.bg_road.width - BACKGROUND_STEP * 2;
-    }
-    else {
-        game.bg_road1.x -= BACKGROUND_STEP;
+    if (!game.STOPING) {
+        //TODO: road
+        if (0 > game.bg_road.x + game.bg_road.width) {
+            game.bg_road.x = game.bg_road.width - BACKGROUND_STEP * 2;
+        }
+        else {
+            game.bg_road.x -= BACKGROUND_STEP;
+        }
+        //road 1
+        if (0 > game.bg_road1.x + game.bg_road.width) {
+            game.bg_road1.x = game.bg_road.width - BACKGROUND_STEP * 2;
+        }
+        else {
+            game.bg_road1.x -= BACKGROUND_STEP;
+        }
+        //TODO: land
+        if (0 > game.bg_land.x + game.bg_land.width) {
+            game.bg_land.x = game.bg_land.width - BACKGROUND_STEP * 2;
+        }
+        else {
+            game.bg_land.x -= BACKGROUND_STEP;
+        }
+        //road 1
+        if (0 > game.bg_land1.x + game.bg_land1.width) {
+            game.bg_land1.x = game.bg_land1.width - BACKGROUND_STEP * 2;
+        }
+        else {
+            game.bg_land1.x -= BACKGROUND_STEP;
+        }
     }
 
     //move cloud
@@ -199,6 +240,7 @@ function move_bg() {
 function collide_meat() {
     game.physics.arcade.collide(game.player, game.meats, function (player, meat) {
         meat.kill();
+        game.score += 2;
         game.player.body.velocity.x = 0;
     }, null, game);
 }
@@ -211,8 +253,15 @@ function collide_wall() {
     game.physics.arcade.collide(game.player, game.walls, function (player, wall) {
         stop_game();
     }, null, game);
-}
 
+    //
+    game.physics.arcade.collide(game.player, game.bg_land, function () {
+        stop_game();
+    }, null, game);
+    game.physics.arcade.collide(game.player, game.bg_land1, function () {
+        stop_game();
+    }, null, game);
+}
 
 //TODO: change game state
 function start_game() {
