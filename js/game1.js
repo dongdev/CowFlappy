@@ -4,7 +4,7 @@ var STATE = {
     create: create,
     update: update,
 };
-var GAME_WIDTH = 1080;
+var GAME_WIDTH = 1280;
 var GAME_HEIGHT = 1920;
 var OPENING = 524;
 var GAME_ID = 'game-canvas';
