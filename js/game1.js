@@ -14,6 +14,7 @@ var GAME_GRAVITY = 1900;
 var WALL_MARGIN_LEFT = 270;
 var WALL_VELOCITY = 200;
 var ROAD_MARGIN_TOP = 1416;
+var JET = 750;
 
 var game = new Phaser.Game(
     GAME_WIDTH,
@@ -83,7 +84,7 @@ function update(delta) {
     move_wall();
 }
 function jump() {
-    game.player.body.velocity.y -= 1300;
+    game.player.body.velocity.y -= JET;
 }
 function move_bg() {
     //move road
