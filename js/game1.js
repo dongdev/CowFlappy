@@ -26,9 +26,7 @@ var game = new Phaser.Game(
 );
 
 var FONT = {
-    fontSize: '50px',
-    fill: '#fff',
-    align: 'center'
+    font: "Bold 86px Arial", fill: '#ffffff'
 };
 function init() {
     game.STOPING = true;
@@ -43,6 +41,8 @@ function preload() {
     game.load.image("bg_medium", "assets/imgs/medium.png");
     game.load.image("bg_road", "assets/imgs/road.png");
     game.load.image("bg_land", "assets/imgs/land.png");
+    game.load.image("closeButton", "assets/imgs/closeButton.png");
+    game.load.image("boxBack", "assets/imgs/boxBack.png");
 }
 
 function create() {
@@ -103,14 +103,16 @@ function update(delta) {
     collide_meat();
     collide_wall();
 
-    game.txt_score.setText("score:" + game.score);
+    if (!game.GAMEOVER)
+        game.txt_score.setText("score:" + game.score);
 
 }
 function jump() {
     if (game.GAMEOVER)
         return;
     if (game.STOPING) {
-        start_game();
+        game.STOPING = false;
+        game.player.body.allowGravity = true;
         jump();
         return;
     }
@@ -264,15 +266,77 @@ function collide_wall() {
 }
 
 //TODO: change game state
-function start_game() {
+function restart_game() {
     game.STOPING = false;
-    game.player.body.allowGravity = true;
+    game.GAMEOVER = false;
+    jump();
+    game.player.x = GAME_WIDTH / 2;
+    game.player.y = GAME_HEIGHT / 2;
+    game.meats.callAll("kill");
+    game.walls.callAll("kill");
+    for (var i = 0; i < 5; i++) {
+        spaw_wall();
+    }
 }
 
 function stop_game() {
+    if (game.STOPING)
+        return;
+    game.score = 0;
     game.STOPING = true;
     game.player.body.velocity.x = 0;
     game.player.body.velocity.y = 0;
     game.GAMEOVER = true;
+    showMessageBox("GAME OVER", 300, 300);
     //game.player.body.allowGravity = false;
 }
+
+//TODO: dialog
+function showMessageBox(text, w, h) {
+    console.log("game over");
+    //just in case the message box already exists
+    //destroy it
+    if (game.msgBox) {
+        game.msgBox.destroy();
+    }
+    var msgBox = game.add.group();
+    var back = game.add.sprite(0, 0, "boxBack");
+    var closeButton = game.add.sprite(0, 0, "closeButton");
+    var text1 = game.add.text(0, 0, text);
+    //set the textfeild to wrap if the text is too long
+    //text1.wordWrap = true;
+    //make the width of the wrap 90% of the width
+    //of the message box
+    //text1.wordWrapWidth = w * .9;
+    //set the width and height passed
+    back.width = w;
+    back.height = h;
+
+    //add the elements to the group
+    msgBox.add(back);
+    msgBox.add(closeButton);
+    msgBox.add(text1);
+
+    closeButton.x = back.width / 2 - closeButton.width / 2;
+    closeButton.y = back.height - closeButton.height;
+    //enable the button for input
+    closeButton.inputEnabled = true;
+    //add a listener to destroy the box when the button is pressed
+    closeButton.events.onInputDown.add(hideBox, this);
+    //set the message box in the center of the screen
+    msgBox.x = game.width / 2 - msgBox.width / 2;
+    msgBox.y = game.height / 2 - msgBox.height / 2;
+    //
+    //set the text in the middle of the message box
+    text1.x = back.width / 2 - text1.width / 2;
+    text1.y = back.height / 2 - text1.height / 2;
+    //make a state reference to the messsage box
+    game.msgBox = msgBox;
+}
+function hideBox() {
+    //destroy the box when the button is pressed
+    console.log("hide boxx");
+    game.msgBox.destroy();
+    restart_game();
+}
+
