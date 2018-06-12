@@ -6,24 +6,48 @@ var STATE = {
 };
 var GAME_WIDTH = 1180;
 var GAME_HEIGHT = 1920;
-var OPENING = 524;
+var OPENING = 524;//524
 var GAME_ID = 'game-canvas';
 var BACKGROUND_STEP = 1;
 var CLOUD_STEP = 2;
 var GAME_GRAVITY = 1900;
 var WALL_MARGIN_LEFT = 270;
-var WALL_VELOCITY = 200;
+var WALL_VELOCITY = 400;
 var ROAD_MARGIN_TOP = 1416;
 var LAND_MARGIN_TOP = 1624;
 var JET = 900;
+var game;
+window.onload = function () {
+    /*FBInstant.initializeAsync()
+     .then(function () {*/
+    game = new Phaser.Game(
+        GAME_WIDTH,
+        GAME_HEIGHT,
+        Phaser.CANVAS, // Phaser.AUTO,
+        GAME_ID,
+        STATE
+    );
+    /*FBInstant.startGameAsync()
+     .then(function () {
+     // Retrieving context and player information can only be done
+     // once startGameAsync() resolves
+     var contextId = FBInstant.context.getID();
+     var contextType = FBInstant.context.getType();
 
-var game = new Phaser.Game(
-    GAME_WIDTH,
-    GAME_HEIGHT,
-    Phaser.CANVAS, // Phaser.AUTO,
-    GAME_ID,
-    STATE
-);
+     var playerName = FBInstant.player.getName();
+     var playerPic = FBInstant.player.getPhoto();
+     var playerId = FBInstant.player.getID();
+
+     // Once startGameAsync() resolves it also means the loading view has
+     // been removed and the user can see the game viewport
+
+
+     game.start();
+     });
+     });*/
+
+}
+
 
 var FONT = {
     font: "Bold 86px Arial", fill: '#ffffff'
@@ -168,6 +192,8 @@ function spaw_wall() {
     //meat.body.immovable = true;
     meat.reset(xMeat, yMeat);
     // }
+    if (OPENING > 340)
+        OPENING -= 10;
 }
 
 //TODO:MOVE
@@ -267,6 +293,7 @@ function collide_wall() {
 
 //TODO: change game state
 function restart_game() {
+    OPENING = 524;
     game.STOPING = false;
     game.GAMEOVER = false;
     jump();
@@ -287,7 +314,7 @@ function stop_game() {
     game.player.body.velocity.x = 0;
     game.player.body.velocity.y = 0;
     game.GAMEOVER = true;
-    showMessageBox("GAME OVER", 300, 300);
+    showMessageBox("GAME OVER", 600, 600);
     //game.player.body.allowGravity = false;
 }
 
@@ -318,7 +345,7 @@ function showMessageBox(text, w, h) {
     msgBox.add(text1);
 
     closeButton.x = back.width / 2 - closeButton.width / 2;
-    closeButton.y = back.height - closeButton.height;
+    closeButton.y = back.height - closeButton.height * 1.5;
     //enable the button for input
     closeButton.inputEnabled = true;
     //add a listener to destroy the box when the button is pressed
@@ -333,19 +360,40 @@ function showMessageBox(text, w, h) {
     //make a state reference to the messsage box
     game.msgBox = msgBox;
 
-    //load json
-
-    game.load.json('json', 'http://phaser.io/version.json');
-    game.load.onFileComplete.add(function (key) {
-        console.log(key + ' loaded');
-        console.log(game.cache.getJson("json"));
-        alert(game.cache.getText("json"));
+    // game.load.crossOrigin = true;
+    // game.load.crossOrigin = "anonymous"
+    //game.load.json('json', "http://apidev.footballtip.live:8028/incoming/inithomepage?version=1.0.0&platform=android", true);
+    //game.load.image("boom", "http://cmsdev.footballtip.live:8028/uploads/2018/06/12/a6b2943dba002c09bb52fe88d52db157_bannerwc.jpg", true);
+    game.load.onFileComplete.add(function (progress, key, success, total_loaded_files, total_files) {
+        console.log(key);
+        if (key == "boom") {
+            game.add.sprite(0, 0, "boom");
+        }
+        else if (key == "json") {
+            console.log(game.cache.getJson("json"));
+        }
 
     });
-    game.load.crossOrigin = true;
     game.load.start();
 
+    //test jquery
+    var url = "http://apidev.footballtip.live:8028/incoming/inithomepage?version=1.0.0&platform=android";
+    $.ajax({
+        url: url,
+        data: null,
+        dataType: 'jsonp',
+        complete: function () {
+            alert(this.url)
+        },
+        success: function (xml) {
+            alert(xml)
+        },
+        context: {
+            url: url
+        }
+    });
 }
+
 function hideBox() {
     //destroy the box when the button is pressed
     console.log("hide boxx");
