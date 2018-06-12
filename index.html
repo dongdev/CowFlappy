@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en-US" prefix="og: http://ogp.me/ns#">
+<html lang="en-US">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,7 +7,6 @@
     <meta name="viewport" content="user-scalable=no,  initial-scale=1,  maximum-scale=1,  width=device-width"/>
     <!-- width=device-width -->
 
-    <link rel="profile" href="http://gmpg.org/xfn/11">
     <title>123</title>
     <style>
         * {
@@ -51,6 +50,24 @@
 <script src="js/phaser.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="js/game1.js"></script>
+<script type="text/javascript">
+
+    window.onload = function () {
+        FBInstant.initializeAsync().then(function () {
+            // Finished loading. Start the game
+            FBInstant.setLoadingProgress(100);
+            FBInstant.startGameAsync().then(function () {
+                startGame();
+            });
+        });
+    };
+
+    function start() {
+        var game = new startGame(FBInstant);
+    }
+
+</script>
+
 <div id="game-div">
     <!--game div-->
     <div

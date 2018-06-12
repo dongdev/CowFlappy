@@ -17,9 +17,8 @@ var ROAD_MARGIN_TOP = 1416;
 var LAND_MARGIN_TOP = 1624;
 var JET = 900;
 var game;
-window.onload = function () {
-    /*FBInstant.initializeAsync()
-     .then(function () {*/
+
+function startGame(FBInstant) {
     game = new Phaser.Game(
         GAME_WIDTH,
         GAME_HEIGHT,
@@ -27,25 +26,6 @@ window.onload = function () {
         GAME_ID,
         STATE
     );
-    /*FBInstant.startGameAsync()
-     .then(function () {
-     // Retrieving context and player information can only be done
-     // once startGameAsync() resolves
-     var contextId = FBInstant.context.getID();
-     var contextType = FBInstant.context.getType();
-
-     var playerName = FBInstant.player.getName();
-     var playerPic = FBInstant.player.getPhoto();
-     var playerId = FBInstant.player.getID();
-
-     // Once startGameAsync() resolves it also means the loading view has
-     // been removed and the user can see the game viewport
-
-
-     game.start();
-     });
-     });*/
-
 }
 
 
