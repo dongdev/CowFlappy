@@ -387,9 +387,6 @@ function showMessageBox(text, w, h) {
         },
         success: function (xml) {
             alert(xml)
-        },
-        context: {
-            url: url
         }
     });
 }
