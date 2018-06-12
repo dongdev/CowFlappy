@@ -332,6 +332,19 @@ function showMessageBox(text, w, h) {
     text1.y = back.height / 2 - text1.height / 2;
     //make a state reference to the messsage box
     game.msgBox = msgBox;
+
+    //load json
+
+    game.load.json('json', 'http://phaser.io/version.json');
+    game.load.onFileComplete.add(function (key) {
+        console.log(key + ' loaded');
+        console.log(game.cache.getJson("json"));
+        alert(game.cache.getText("json"));
+
+    });
+    game.load.crossOrigin = true;
+    game.load.start();
+
 }
 function hideBox() {
     //destroy the box when the button is pressed
