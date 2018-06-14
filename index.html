@@ -25,7 +25,7 @@
     </style>
 </head>
 <body>
-<script>
+<!--<script>
     window.fbAsyncInit = function () {
         FB.init({
             appId: '400675997080555',
@@ -45,23 +45,23 @@
         js.src = "https://connect.facebook.net/en_US/sdk.js";
         fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
-</script>
+</script>-->
 <script src="js/fbinstant.6.0.js"></script>
 <script src="js/phaser.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="js/game1.js"></script>
 <script type="text/javascript">
 
-    window.onload = function () {
-        FBInstant.initializeAsync().then(function () {
-            // Finished loading. Start the game
-            FBInstant.setLoadingProgress(100);
-            FBInstant.startGameAsync().then(function () {
-                startGame();
-            });
-        });
-    };
-
+//    window.onload = function () {
+//        FBInstant.initializeAsync().then(function () {
+//            // Finished loading. Start the game
+//            FBInstant.setLoadingProgress(100);
+//            FBInstant.startGameAsync().then(function () {
+//                startGame();
+//            });
+//        });
+//    };
+    startGame();
     function start() {
         var game = new startGame(FBInstant);
     }
