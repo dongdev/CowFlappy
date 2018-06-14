@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html lang="en-US">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
     <!-- <meta name="viewport" content="width=device-width,initial-scale=1"> -->
     <meta name="viewport" content="user-scalable=no,  initial-scale=1,  maximum-scale=1,  width=device-width"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="full-screen" content="yes"/>
+    <meta name="screen-orientation" content="portrait"/>
     <!-- width=device-width -->
-
     <title>123</title>
     <style>
         * {
@@ -23,59 +24,45 @@
             display: block;
         }
     </style>
+    <script src="https://connect.facebook.net/en_US/fbinstant.6.0.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/util.js"></script>
+    <script src="js/fbsdk.js"></script>
+    <script src="js/phaser.min.js"></script>
+    <script src="js/game1.js"></script>
 </head>
 <body>
-<!--<script>
-    window.fbAsyncInit = function () {
-        FB.init({
-            appId: '400675997080555',
-            xfbml: true,
-            version: 'v3.0'
+<script>
+    const IMAGES = ['background-texture', 'bg', 'closeButton', 'ch_gogi', 'cloud', 'demo', 'hut-mui', 'land', 'meat', 'medium', 'player', 'road', 'wall'];
+    var isFNInstant = false; // 'iOS', 'android' or 'web'
+    if (isFNInstant) {
+        FBInstant.initializeAsync().then(function () {
+            // Start loading game assets here
+            IMAGES.forEach(function (imgName, index) {
+                var img = new Image();
+                img.src = './assets/imgs/' + imgName + '.png';
+                FBInstant.setLoadingProgress(Math.ceil(index / IMAGES.length) * 100);
+            });
+            FBInstant.startGameAsync().then(function () {
+                // Retrieving context and player information can only be done
+                // once startGameAsync() resolves
+                var contextId = FBInstant.context.getID();
+                var contextType = FBInstant.context.getType();
+                var playerName = FBInstant.player.getName();
+                var playerPic = FBInstant.player.getPhoto();
+                var playerId = FBInstant.player.getID();
+                // Once startGameAsync() resolves it also means the loading view has
+                // been removed and the user can see the game viewport
+                startGame(FBInstant);
+                game.start();
+            });
+        }).catch(function (error) {
+            alert("catch");
         });
-        FB.AppEvents.logPageView();
-    };
-
-    (function (d, s, id) {
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) {
-            return;
-        }
-        js = d.createElement(s);
-        js.id = id;
-        js.src = "https://connect.facebook.net/en_US/sdk.js";
-        fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
-</script>-->
-<script src="js/fbinstant.6.0.js"></script>
-<script src="js/phaser.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="js/game1.js"></script>
-<script type="text/javascript">
-
-//    window.onload = function () {
-//        FBInstant.initializeAsync().then(function () {
-//            // Finished loading. Start the game
-//            FBInstant.setLoadingProgress(100);
-//            FBInstant.startGameAsync().then(function () {
-//                startGame();
-//            });
-//        });
-//    };
-    startGame();
-    function start() {
-        var game = new startGame(FBInstant);
     }
-
+    else {
+        initFBSdk();
+    }
 </script>
-
-<div id="game-div">
-    <!--game div-->
-    <div
-            class="fb-like"
-            data-share="true"
-            data-width="450"
-            data-show-faces="true">
-    </div>
-</div>
 </body>
 </html>
