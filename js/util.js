@@ -2,7 +2,7 @@
 var ERROR = "an error";
 var LOGIN_FAIL = "login fail!!!"
 var NOT_LOGIN = "not_authorized"
-var SCORE = "SCORE: "
+var SCORE = "2.6.2 SCORE: "
 //var
 //var GAME_WIDTH = window.innerWidth;
 //var GAME_HEIGHT = window.innerHeight;

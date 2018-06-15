@@ -100,8 +100,8 @@ function create() {
 
     //handler touch
     dgame.input.onDown.add(jump, dgame);
-    dgame.input.maxPointers = 2;
-    dgame.input.multiInputOverride = Phaser.Input.TOUCH_OVERRIDES_MOUSE;
+    //dgame.input.maxPointers = 2;
+    //dgame.input.multiInputOverride = Phaser.Input.TOUCH_OVERRIDES_MOUSE;
 
 
 }
