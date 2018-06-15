@@ -62,6 +62,9 @@ function create() {
     dgame.bt_sound = dgame.add.sprite(32, 32, "bt_sound");
     dgame.bt_sound.frame = 0;
     dgame.bt_sound.inputEnabled = true;
+    dgame.bt_sound.input.pixelPerfectOver = true;
+    //  Enable the hand cursor
+    dgame.bt_sound.input.useHandCursor = true;
     dgame.bt_sound.events.onInputDown.add(function () {
         if (dgame.bt_sound.frame == 0)
             dgame.bt_sound.frame = 1;
@@ -72,6 +75,9 @@ function create() {
     dgame.bt_pause.frame = 0;
     dgame.bt_pause.anchor.setTo(1, 0);
     dgame.bt_pause.inputEnabled = true;
+    dgame.bt_pause.input.pixelPerfectOver = true;
+    //  Enable the hand cursor
+    dgame.bt_pause.input.useHandCursor = true;
     dgame.bt_pause.events.onInputDown.add(function () {
         if (dgame.bt_pause.frame == 0)
             dgame.bt_pause.frame = 1;
@@ -93,7 +99,10 @@ function create() {
     dgame.txt_score.anchor.setTo(0.5, 0.5);
 
     //handler touch
+    dgame.input.pixelPerfectOver = true;
+    dgame.input.useHandCursor = true;
     dgame.input.onDown.add(jump, dgame);
+
 }
 function update(delta) {
     move_bg();
@@ -353,8 +362,11 @@ function showMessageBox(text, w, h) {
     closeButton.y = back.height - closeButton.height * 1.5;
     //enable the button for input
     closeButton.inputEnabled = true;
+    closeButton.input.pixelPerfectOver = true;
+    closeButton.input.useHandCursor = true;
     //add a listener to destroy the box when the button is pressed
     closeButton.events.onInputDown.add(hideBox, this);
+
     //set the message box in the center of the screen
     msgBox.x = dgame.width / 2 - msgBox.width / 2;
     msgBox.y = dgame.height / 2 - msgBox.height / 2;
