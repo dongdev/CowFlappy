@@ -11,7 +11,7 @@ function startGame(FBInstant) {
     dgame = new Phaser.Game(
         GAME_WIDTH,
         GAME_HEIGHT,
-        Phaser.AUTO, // Phaser.AUTO,
+        Phaser.CANVAS, // Phaser.AUTO,
         GAME_ID,
         STATE
     );
