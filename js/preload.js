@@ -3,6 +3,7 @@ function loadResource() {
     dgame.load.image("player", "assets/imgs/gogi.png");
     dgame.load.image("bg_cloud", "assets/imgs/nui_may.png");
     dgame.load.image("wall", "assets/imgs/hut-mui.png");
+    dgame.load.image("wall1", "assets/imgs/hut-mui1.png");
     dgame.load.image("meat", "assets/imgs/thit.png");
     dgame.load.image("ball", "assets/imgs/bong.png");
     dgame.load.image("coca", "assets/imgs/coke.png");

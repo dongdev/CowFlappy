@@ -146,7 +146,7 @@ function spaw_wall() {
             x = lastWall.x + lastWall.width + WALL_MARGIN_LEFT;
     }
     var wall1 = dgame.walls.create(x, y1, "wall");
-    var wall2 = dgame.walls.create(x, y2, "wall");
+    var wall2 = dgame.walls.create(x, y2 - dgame.cache.getImage("wall1").height, "wall1");
     //add physic
     dgame.physics.arcade.enableBody(wall1);
     dgame.physics.arcade.enableBody(wall2);
@@ -160,8 +160,9 @@ function spaw_wall() {
     wall1.collected = false;
     wall2.collected = false;
 
-    wall2.scale.y = -1;
-    wall2.body.offset.y = -wall2.body.height;
+    //TODO: Not working 2.6.2
+    /*wall2.scale.y = -1;
+     wall2.body.offset.y = -wall2.body.height;*/
 
     //TODO: Meat center
     var meat = dgame.meats.getFirstDead();
