@@ -16,7 +16,7 @@
         }
 
         body {
-            background: #6b92b9;
+            background: #000000;
             justify-content: center;
         }
 
@@ -24,17 +24,19 @@
             display: block;
         }
     </style>
+    <link rel="stylesheet" type="text/css" href="css/fontLoader.css">
     <script src="https://connect.facebook.net/en_US/fbinstant.6.0.js"></script>
-    <script src="js/config.js"></script>
+    <script src="js/jquery-2.0.0.min.js"></script>
+    <script src="js/preload.js"></script>
     <script src="js/util.js"></script>
     <script src="js/fbsdk.js"></script>
     <script src="js/phaser.min.js"></script>
-    <script src="js/game1.js"></script>
+    <script src="js/game.js"></script>
 </head>
 <body>
 <script>
-    const IMAGES = ['background-texture', 'bg', 'closeButton', 'ch_gogi', 'cloud', 'demo', 'hut-mui', 'land', 'meat', 'medium', 'player', 'road', 'wall'];
-    var isFNInstant = false; // 'iOS', 'android' or 'web'
+    const IMAGES = ['background-texture', 'bg', 'bong', 'boxback', 'bt_playgame', 'bt_sound', 'coke', 'gogi', 'hut-mui', 'nen', 'nui_may', 'red-line', 'san-vd', 'thit'];
+    var isFNInstant = true; // 'iOS', 'android' or 'web'
     if (isFNInstant) {
         FBInstant.initializeAsync().then(function () {
             // Start loading game assets here
@@ -61,7 +63,8 @@
         });
     }
     else {
-        initFBSdk();
+        startGame(null);
+        //initFBSdk();
     }
 </script>
 </body>
