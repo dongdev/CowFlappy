@@ -99,9 +99,10 @@ function create() {
     dgame.txt_score.anchor.setTo(0.5, 0.5);
 
     //handler touch
-    dgame.input.pixelPerfectOver = true;
-    dgame.input.useHandCursor = true;
     dgame.input.onDown.add(jump, dgame);
+    dgame.input.maxPointers = 2;
+    dgame.input.multiInputOverride = Phaser.Input.TOUCH_OVERRIDES_MOUSE;
+
 
 }
 function update(delta) {
