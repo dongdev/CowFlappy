@@ -40,7 +40,6 @@ function checkLogin() {
         }
     });
 }
-
 function login() {
     FB.login(function (response) {
         if (response.authResponse) {
@@ -60,3 +59,4 @@ function login() {
         }
     }, {scope: 'email,user_likes'});
 }
+
