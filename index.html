@@ -33,19 +33,14 @@
     <script src="https://connect.facebook.net/en_US/fbinstant.6.0.js"></script>
     <!--<script src="js/jquery-2.0.0.min.js"></script>-->
     <script src="js/dialog.js"></script>
-    <script src="js/textview.js"></script>
     <script src="js/util.js"></script>
     <script src="js/fbsdk.js"></script>
-    <!--<script src="js/phaser.min.js"></script>-->
     <script src="js/phaser262.min.js"></script>
-    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/2.6.2/phaser.min.js"></script>-->
     <script src="js/scene_preload.js"></script>
     <script src="js/scene_game.js"></script>
     <script src="js/scene_menu.js"></script>
     <script src="js/sound.js"></script>
-
     <script src="js/game.js"></script>
-    <script src="js/CanvasInput.min.js"></script>
 
     <style>
         body {
@@ -58,29 +53,25 @@
 <body>
 <script>
     const IMAGES = ['background-texture', 'bg', 'bong', 'boxback', 'bt_playgame', 'bt_sound', 'coke', 'gogi', 'hut-mui', 'nen', 'nui_may', 'red-line', 'san-vd', 'thit'];
-    var isFNInstant = false; // 'iOS', 'android' or 'web'
+    // 'iOS', 'android' or 'web'
     if (isFNInstant) {
         FBInstant.initializeAsync().then(function () {
-            // Start loading game assets here
-            IMAGES.forEach(function (imgName, index) {
-                var img = new Image();
-                img.src = './assets/imgs/' + imgName + '.png';
-                FBInstant.setLoadingProgress(Math.ceil(index / IMAGES.length) * 100);
-            });
-            FBInstant.startGameAsync().then(function () {
-                // Retrieving context and player information can only be done
-                // once startGameAsync() resolves
-                var contextId = FBInstant.context.getID();
-                var contextType = FBInstant.context.getType();
-                var playerName = FBInstant.player.getName();
-                var playerPic = FBInstant.player.getPhoto();
-                var playerId = FBInstant.player.getID();
-                // Once startGameAsync() resolves it also means the loading view has
-                // been removed and the user can see the game viewport
-                log(contextId + "/" + playerName + "/" + playerPic);
-                startGame(FBInstant);
-                game.start();
-            });
+//            IMAGES.forEach(function (imgName, index) {
+//                var img = new Image();
+//                img.src = './assets/imgs/' + imgName + '.png';
+//                FBInstant.setLoadingProgress(Math.ceil(index / IMAGES.length) * 100);
+//            });
+//            FBInstant.startGameAsync().then(function () {
+//                var contextId = FBInstant.context.getID();
+//                var contextType = FBInstant.context.getType();
+//                playerName = FBInstant.player.getName();
+//                playerPic = FBInstant.player.getPhoto();
+//                playerId = FBInstant.player.getID();
+//                log(contextId + "/" + playerName + "/" + playerPic);
+//                startGame(FBInstant);
+//                game.start();
+//            });
+            startGame(FBInstant);
         }).catch(function (error) {
             alert("catch");
         });
@@ -90,8 +81,6 @@
         //initFBSdk();
     }
 </script>
-<canvas id="canvas" width="350" height="50"></canvas>
-
 
 </body>
 </html>

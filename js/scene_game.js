@@ -278,6 +278,7 @@ var SceneGame = {
                 soundFall();
             }
         }
+
     }
     ,
     jump: function () {
@@ -293,6 +294,17 @@ var SceneGame = {
             dgame.STARTED = true;
             dgame.player.body.allowGravity = true;
             dgame.player.body.velocity.y -= JET;
+            var source = isFNInstant ? SOURCE[0] : SOURCE[1];
+            var link = 'http://gogi.icod.mobi/gogiApi/gamestart?player_id=' + playerId + '&display_name=' + playerName + '&avatar=' + playerPic + '&source=' + source;
+            log(link);
+            dgame.load.json('start_json', link);
+            dgame.load.onFileComplete.add(function (progress, file_key, success, total_loaded_files, total_files) {
+                if (!success)
+                    return;
+                if (file_key.includes("start_json")) {
+                    dgame.session_id = dgame.cache.getJSON("start_json").session_id;
+                }
+            });
             return;
         }
         else if (dgame.PAUSE) {

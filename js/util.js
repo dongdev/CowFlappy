@@ -10,6 +10,8 @@ var SCENE_GAME = "ingame";
 //var
 //var GAME_WIDTH = window.innerWidth;
 //var GAME_HEIGHT = window.innerHeight;
+var isFNInstant = true;
+var SOURCE = ["fbm", "gstand"];
 var GAME_WIDTH = 1080;
 var GAME_HEIGHT = 1920;
 var OPENING = 500;//524
@@ -22,6 +24,10 @@ var WALL_MARGIN_LEFT = 370;
 var WALL_VELOCITY = 200;
 var WALL_VELOCITY_MAX = 200;
 var WALL_VELOCITY_MIN = 400;
+//
+var playerName = null;
+var playerPic = null;
+var playerId = null;
 //margin
 var PLAYER_DEFAULT_Y = 712;
 var CLOUD_MARGIN_TOP = 160;
