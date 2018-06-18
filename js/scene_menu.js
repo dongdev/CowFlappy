@@ -7,18 +7,21 @@ var Menu = {
         dgame.add.sprite(96, 128, "menu_logo");
         var bt_play = dgame.add.button((GAME_WIDTH - dgame.cache.getImage("menu_play").width / 2 ) / 2, 1184, "menu_play", function () {
             dgame.state.start(SCENE_GAME);
-        }, this, 1, 0, 1);
+        }, this, 1, 0, 1, 0);
 
         var bt_rank = dgame.add.button(148, 1488, "menu_rank", function () {
             boxRank();
-        }, this, 1, 0, 1);
+            soundClick();
+        }, this, 1, 0, 1, 0);
         var bt_gift = dgame.add.button(444, 1572, "menu_gift", function () {
             boxCartGift();
+            soundClick();
 
-        }, this, 1, 0, 1);
+        }, this, 1, 0, 1, 0);
         var bt_tut = dgame.add.button(760, 1488, "menu_tutorial", function () {
             boxRule();
-        }, this, 1, 0, 1);
+            soundClick();
+        }, this, 1, 0, 1, 0);
 
         //sound
         dgame.bt_sound = dgame.add.sprite(32, 32, "bt_sound");

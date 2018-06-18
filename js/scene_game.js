@@ -242,7 +242,7 @@ var SceneGame = {
         dgame.player.body.allowGravity = false;
         dgame.player.anchor.setTo(0.5, 0);
         dgame.player.body.collideWorldBounds = true;
-        dgame.player.body.offset.y = -10;
+        dgame.player.body.offset.y = 20;
 
         //score
         dgame.score = 0;
@@ -286,7 +286,6 @@ var SceneGame = {
         var y = dgame.input.activePointer.y;
         if (y < 500)
             return;
-        log("jum");
         if (dgame.GAMEOVER)
             return;
 
@@ -386,7 +385,7 @@ var SceneGame = {
 
         //change open
         if (OPENING > 340)
-            OPENING -= 10;
+            OPENING -= 5;
 
         //change volocity
         if (dgame.score < EASY) {
@@ -394,7 +393,7 @@ var SceneGame = {
         }
         else {
             if (WALL_VELOCITY < WALL_VELOCITY_MIN)
-                WALL_VELOCITY += 10;
+                WALL_VELOCITY += 5;
         }
     }
 }

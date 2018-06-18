@@ -5,6 +5,11 @@ function canPlay() {
 function soundBg() {
     if (!canPlay())
         return;
+    if(dgame.soundBg!= null)
+    {
+        dgame.soundBg.stop();
+        dgame.soundBg = null;
+    }
     var sound = dgame.add.audio('bg', 1, true);
     sound.allowMultiple = true;
     sound.loop = true;

@@ -24,13 +24,18 @@ function boxEndGame(score) {
     var btShare = dgame.add.button(303, 1021, 'endgame_share', function () {
         if (dgame.FBInstant != null) {
             //intent can be "INVITE", "REQUEST", "CHALLENGE" or "SHARE"
-            FBInstant.shareAsync({
-                intent: 'INVITE',
-                text: 'X is asking for your help!',
-                data: {myReplayData: '...'},
-            }).then(function () {
-                // continue with the game.
-            });
+            var myImg = playerPic == null ? '' : window.btoa(playerPic);
+            log(myImg);
+            // FBInstant.shareAsync({
+            //     intent: 'INVITE',
+            //     image: "https%3A//scontent.fhan2-3.fna.fbcdn.net/v/t1.0-1/p320x320/23434885_1488621997890318_690721878521796166_n.jpg%3F_nc_cat%3D0%26oh%3D7e09e834e20abb8e1695354baed14a00%26oe%3D5BB5A317",
+            //     text: 'Nào hãy chơi game cùng mình nhé!',
+            //     data: {'': '...'},
+            // }).then(function () {
+            //     // continue with the game.
+            //     log("share callback")
+            // });
+            dgame.FBInstant.context.chooseAsync();
         }
         soundClick();
     }, this, 1, 0, 1, 0);
@@ -39,38 +44,34 @@ function boxEndGame(score) {
         soundClick();
     }, this, 1, 0, 1, 0);
 
-//rank
-//size of frame 200x244
+    //rank
+    //size of frame 200x244
 
     var x1 = 172;
     var x2 = 432;
     var x3 = 724;
     var y = 1596;
-
-    var end_rank_ava = [
-        "https://www.androidpolice.com/wp-content/uploads/2017/05/nexus2cee_photobooks-1-728x403.png",
-        "http://phaser.io/images/img.png",
-        "http://cmsdev.footballtip.live:8028/uploads/2018/06/12/a6b2943dba002c09bb52fe88d52db157_bannerwc.jpg"]
-    end_rank_ava.forEach(function (p1, p2, p3) {
-        var rand = dgame.rnd.integerInRange(0, 36890);
-        var regex = p1.includes("?") ? "&v=" + rand : "?v=" + rand;
-        dgame.load.image("end_ava_key" + p2, p1 + regex, true);
-    });
+    var key_ava = "end_ava_key";
 
     var link = 'http://gogi.icod.mobi/gogiApi/gameend?session_id=' + dgame.session_id + "&points=" + score;
+    var link_end_rank = 'http://gogi.icod.mobi/gogiApi/top';
     log(link);
+    log(link_end_rank);
+    dgame.load.json('link_end_rank', link_end_rank);
     dgame.load.json('end_notify_json', link);
     dgame.load.start();
     var count;
     dgame.load.onFileComplete.add(function (progress, file_key, success, total_loaded_files, total_files) {
         if (!success)
             return;
-        if (file_key.includes("end_ava_key")) {
-            var ava_rank1 = dgame.add.sprite(file_key == "end_ava_key" + 0 ? x1 : file_key == "end_ava_key" + 1 ? x2 : x3, y, file_key);
+        log("reponsce:" + file_key)
+        if (file_key.includes(key_ava)) {
+            var pos = file_key.replace(key_ava, "");
+            var ava_rank1 = dgame.add.sprite(pos == 0 ? x1 : pos == 1 ? x2 : x3, y, file_key);
             var cache_ava_rank1 = dgame.cache.getImage(file_key);
             ava_rank1.scale.setTo(200 / cache_ava_rank1.width, 244 / cache_ava_rank1.height);
             box.add(ava_rank1);
-            if (count == end_rank_ava.size) {
+            if (count == 3) {
                 var endgame_bg_rank1 = dgame.add.sprite(87, 1536, "endgame_bg_rank");
                 box.add(endgame_bg_rank1);
             }
@@ -83,10 +84,31 @@ function boxEndGame(score) {
         } else if (file_key.includes("end_notify_json")) {
             log(dgame.cache.getJSON("end_notify_json"));
         }
+        else if (file_key.includes("link_end_rank")) {
+            log(dgame.cache.getJSON("link_end_rank"));
+            var jRoot = dgame.cache.getJSON("link_end_rank");
+            var top = jRoot.top;
+            top.forEach(function (p1, p2, p3) {
+                if (p2 < 3) {
+                    //var avatar = "http://phaser.io/images/img.png";
+                    var avatar = p1.avatar;
+                    if (avatar == null || avatar.includes("null")) {
+                        count += 1;
+                    }
+                    else {
+                        var rand = dgame.rnd.integerInRange(0, 36890);
+                        var regex = avatar.includes("?") ? "&v=" + rand : "?v=" + rand;
+                        dgame.load.image(key_ava + p2, avatar + regex, true);
+                        dgame.load.start();
+                    }
+                }
+            });
+        }
+
     });
 
-    var endgame_bg_rank = dgame.add.sprite(87, 1536, "endgame_bg_rank");
 
+    var endgame_bg_rank = dgame.add.sprite(87, 1536, "endgame_bg_rank");
     box.add(bg);
     box.add(text);
     box.add(btReplay);
@@ -157,7 +179,7 @@ function boxGift() {
         if (!success)
             return;
         if (file_key.includes("gift_json")) {
-            var msg = dgame.cache.getJSON("gift_json").msg;
+            var msg = dgame.cache.getJSON("gift_json")[0].code;
             if (new String(msg).valueOf() == new String("wrong session").valueOf()) {
                 text.setText("" + msg);
             }
@@ -177,11 +199,14 @@ function boxGift() {
     dgame.boxGift = box;
 }
 
+//TODO: Cart Gift
 function boxCartGift() {
     if (dgame.boxCart != null)
         return;
     var box = dgame.add.group();
     var bg = dgame.add.sprite(0, 0, "cart_bg");
+    var box_voucher;
+    var page_size = 4;
     bg.inputEnabled = true;
     bg.events.onInputDown.add(function () {
 
@@ -192,24 +217,77 @@ function boxCartGift() {
         soundClick();
     }, this, 0, 0, 0);
     var btPrev = dgame.add.button(256, 1472, "bt_prev", function () {
-
+        soundClick();
+        var prevPage = box.page - 1;
+        if (prevPage < 0)
+            return;
+        box.page = prevPage;
+        bindCart(box.jVouchers, box.page, page_size, box_voucher);
     }, this, 0);
     var btNext = dgame.add.button(736, 1472, "bt_next", function () {
-
+        soundClick();
+        var nextpage = box.page + 1;
+        if (box.jVouchers == null || box.jVouchers.length < nextpage * page_size)
+            return;
+        box.page = nextpage;
+        bindCart(box.jVouchers, box.page, page_size, box_voucher);
     }, this, 0);
+
+    //json
+    var linkCart = "http://gogi.icod.mobi/gogiApi/getMyRewards?player_id=123123213123";
+    log(linkCart);
+    dgame.load.json('link_cart_gift', linkCart);
+    dgame.load.onFileComplete.add(function (progress, file_key, success, total_loaded_files, total_files) {
+        if (!success)
+            return;
+        if (file_key.includes("link_cart_gift")) {
+            log(dgame.cache.getJSON("link_cart_gift"));
+            var jRoot = dgame.cache.getJSON("link_cart_gift");
+            var vouchers = jRoot.vouchers;
+            box.jVouchers = vouchers;
+            box_voucher = dgame.add.group();
+            box.add(box_voucher);
+            bindCart(vouchers, 0, page_size, box_voucher);
+        }
+    });
+    dgame.load.start();
+
     box.add(bg);
     box.add(close);
     box.add(btPrev);
     box.add(btNext);
-
+    box.page = 0;
     dgame.boxCart = box;
 }
 
+function bindCart(arr, page, page_size, box) {
+    if (arr == null)
+        return;
+    var key = "cart_v_key";
+    var x = 248;
+    var y = 612;
+    var w = 600;
+    var h = 92;
+    box.callAll("kill");
+
+    arr.forEach(function (p1, pos, p3) {
+        if (pos >= page * page_size && pos < (page + 1) * page_size) {
+            var voucher = arr[pos];
+            var text = dgame.add.text(0, 0, voucher.code, style_rank2);
+            text.setTextBounds(x, y + h * (pos - page * page_size), w, h);
+            box.add(text);
+        }
+    });
+
+}
+
+//TODO: Rank
 function boxRank() {
     if (dgame.boxRank != null)
         return;
     var box = dgame.add.group();
     var bg = dgame.add.sprite(0, 0, "rank_bg");
+    var box_rank;
     bg.inputEnabled = true;
     bg.events.onInputDown.add(function () {
 
@@ -220,14 +298,20 @@ function boxRank() {
         soundClick();
     }, this, 0, 0, 0);
     var btPrev = dgame.add.button(288, 1472, "bt_prev", function () {
-        box.page -= 1;
-        if (box.page < 0)
-            box.page = 0;
-        bindRank(box.jTop, box.page, box);
+        var prevPage = box.page - 1;
+        if (prevPage < 0)
+            return;
+        box.page = prevPage;
+        bindRank(box.jTop, box.page, box_rank);
+        soundClick();
     }, this, 0);
     var btNext = dgame.add.button(740, 1472, "bt_next", function () {
-        box.page += 1;
-        bindRank(box.jTop, box.page, box);
+        var nextPage = box.page + 1;
+        if (nextPage > box.jTop.length)
+            return;
+        box.page = nextPage;
+        bindRank(box.jTop, box.page, box_rank);
+        soundClick();
     }, this, 0);
     //load json
     var link = 'http://gogi.icod.mobi/gogiApi/top';
@@ -242,7 +326,9 @@ function boxRank() {
             var jRoot = dgame.cache.getJSON("rank_json");
             var top = jRoot.top;
             box.jTop = top;
-            bindRank(top, 0, box);
+            box_rank = dgame.add.group();
+            box.add(box_rank);
+            bindRank(top, 0, box_rank);
         }
     });
 
@@ -250,13 +336,15 @@ function boxRank() {
     box.add(close);
     box.add(btPrev);
     box.add(btNext);
-    boxRank.page = 0;
+    box.page = 0;
     dgame.boxRank = box;
 }
 
 function bindRank(arr, page, box) {
     if (arr == null)
         return;
+    var page_size = 4
+    box.callAll("kill");
     var key = "rank_key";
     var y1 = 621;
     var y2 = 807;
@@ -266,9 +354,29 @@ function bindRank(arr, page, box) {
     var tx_x = 444;
     var tx_y = ["631|711", "810|890", "1011|1091", "1200|1280"]
 
+    var count;
+    dgame.load.onFileComplete.add(function (progress, file_key, success, total_loaded_files, total_files) {
+        if (!success)
+            return;
+        if (file_key.includes(key)) {
+            var image = dgame.add.sprite(288, file_key == key + 0 ? y1 : file_key == key + 1 ? y2 : file_key == key + 2 ? y3 : y4, file_key);
+            var cache_image = dgame.cache.getImage(file_key);
+            image.scale.setTo(129 / cache_image.width, 144 / cache_image.height);
+            box.add(image);
+            if (count == arr.size) {
+                //add vertical bg
+                var x = 244;
+                var y = 572;
+                var temBg = dgame.add.sprite(x, y, "rank_bg_temp");
+                box.add(temBg);
+            }
+        }
+        count += 1;
+    });
+
     arr.forEach(function (p1, pos, p3) {
-        if (pos >= page && pos < (page + 1) * 4) {
-            var y = tx_y[pos].split("|");
+        if (pos >= page * page_size && pos < (page + 1) * page_size) {
+            var y = tx_y[pos - page * page_size].split("|");
             var player = arr[pos];
             var text1 = dgame.add.text(tx_x, y[0], pos + 1, style_rank1);
             text1.stroke = '#000000';
@@ -279,7 +387,7 @@ function bindRank(arr, page, box) {
 
             //var avatar = "http://phaser.io/images/img.png";
             var avatar = p1.avatar;
-            if (avatar == null) {
+            if (avatar == null || avatar.includes("null")) {
                 count += 1;
             }
             else {
@@ -291,23 +399,4 @@ function bindRank(arr, page, box) {
         }
     });
 
-    var count;
-    dgame.load.onFileComplete.add(function (progress, file_key, success, total_loaded_files, total_files) {
-        if (!success)
-            return;
-        if (file_key.includes(key)) {
-            var ava_rank1 = dgame.add.sprite(288, file_key == key + 0 ? y1 : file_key == key + 1 ? y2 : file_key == key + 2 ? y3 : y4, file_key);
-            var cache_ava_rank1 = dgame.cache.getImage(file_key);
-            ava_rank1.scale.setTo(129 / cache_ava_rank1.width, 144 / cache_ava_rank1.height);
-            box.add(ava_rank1);
-            if (count == arr.size) {
-                //add vertical bg
-                var x = 244;
-                var y = 572;
-                var temBg = dgame.add.sprite(x, y, "rank_bg_temp");
-                box.add(temBg);
-            }
-        }
-        count += 1;
-    });
 }
