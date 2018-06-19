@@ -174,6 +174,7 @@ var SceneGame = {
     ,
     preload: function () {
         that = this;
+        loadResourcePlay();
     }
     ,
 
@@ -255,6 +256,8 @@ var SceneGame = {
         //dgame.input.multiInputOverride = Phaser.Input.TOUCH_OVERRIDES_MOUSE;
 
         soundBg();
+        removeMenuAsset();
+        loadRourceEndGame();
     }
     ,
     update: function (delta) {
@@ -295,9 +298,18 @@ var SceneGame = {
             dgame.player.body.velocity.y -= JET;
             var source = isFNInstant ? SOURCE[0] : SOURCE[1];
             if (playerId != null) {
-                var link = 'https://icod.mobi/gogiApi/gamestart?player_id=' + (playerId == null ? "" : playerId) + '&display_name=' + (playerName == null ? "" : playerName ) + '&avatar=' + ( playerPic == null ? "" : playerPic) + '&source=' + source;
-                log("start: " + link);
-                dgame.load.json('start_json', link);
+                var pack = JSON.stringify({
+                    "id": "gamestart",
+                    "player_id": playerId,
+                    "display_name": playerName,
+                    "avatar": playerPic == null ? "" : playerPic,
+                    "source": source
+                });
+                DSocket(pack, function (ev) {
+                    var data = JSON.parse(ev.data);
+                    sessionId = data.session_id;
+                    log("sessionId:" + sessionId);
+                });
                 dgame.load.onFileComplete.add(function (progress, file_key, success, total_loaded_files, total_files) {
                     if (!success)
                         return;

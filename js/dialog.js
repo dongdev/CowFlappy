@@ -53,42 +53,14 @@ function boxEndGame(score) {
     var key_ava = "end_ava_key";
 
     if (sessionId != null) {
-        var link = 'https://icod.mobi/gogiApi/gameend?session_id=' + sessionId + "&points=" + score;
-        var link_end_rank = 'https://icod.mobi/gogiApi/top';
-        log(link_end_rank);
-        dgame.load.json('link_end_rank', link_end_rank);
-        if (sessionId != null) {
-            dgame.load.json('end_notify_json', link);
-            log(link);
-        }
-        dgame.load.start();
-        var count = 0;
-        dgame.load.onFileComplete.add(function (progress, file_key, success, total_loaded_files, total_files) {
-            if (!success)
-                return;
-            log("reponsce:" + file_key)
-            if (file_key.includes(key_ava)) {
-                var pos = file_key.replace(key_ava, "");
-                var ava_rank1 = dgame.add.sprite(pos == 0 ? x1 : pos == 1 ? x2 : x3, y, file_key);
-                var cache_ava_rank1 = dgame.cache.getImage(file_key);
-                ava_rank1.scale.setTo(200 / cache_ava_rank1.width, 244 / cache_ava_rank1.height);
-                box.add(ava_rank1);
-                if (count == 3) {
-                    var endgame_bg_rank1 = dgame.add.sprite(87, 1536, "endgame_bg_rank");
-                    box.add(endgame_bg_rank1);
-                }
-                else {
-                    count += 1;
-                }
-            }
-            else if (file_key.includes("end_json")) {
-                log(dgame.cache.getJSON("end_json"));
-            } else if (file_key.includes("end_notify_json")) {
-                log(dgame.cache.getJSON("end_notify_json"));
-            }
-            else if (file_key.includes("link_end_rank")) {
-                log(dgame.cache.getJSON("link_end_rank"));
-                var jRoot = dgame.cache.getJSON("link_end_rank");
+        var pack = JSON.stringify({
+            "id": "gameend",
+            "session_id": sessionId,
+            "points": score
+        });
+        DSocket(pack, function (ev) {
+            if (ev.data.includes("gameendResponse")) {
+                var jRoot = JSON.parse(ev.data)
                 var top = jRoot.top;
                 top.forEach(function (p1, p2, p3) {
                     if (p2 < 3) {
@@ -105,8 +77,22 @@ function boxEndGame(score) {
                         }
                     }
                 });
+                var count = 0;
+                dgame.load.onFileComplete.add(function (progress, file_key, success, total_loaded_files, total_files) {
+                    if (file_key.includes(key_ava)) {
+                        count += 1;
+                        var pos = file_key.replace(key_ava, "");
+                        var ava_rank1 = dgame.add.sprite(pos == 0 ? x1 : pos == 1 ? x2 : x3, y, success ? file_key : "davatar");
+                        var cache_ava_rank1 = dgame.cache.getImage(success ? file_key : "davatar");
+                        ava_rank1.scale.setTo(200 / cache_ava_rank1.width, 244 / cache_ava_rank1.height);
+                        box.add(ava_rank1);
+                        if (count == 3) {
+                            var endgame_bg_rank1 = dgame.add.sprite(87, 1536, "endgame_bg_rank");
+                            box.add(endgame_bg_rank1);
+                        }
+                    }
+                });
             }
-
         });
     }
 
@@ -294,6 +280,7 @@ function boxRank() {
     var box = dgame.add.group();
     var bg = dgame.add.sprite(0, 0, "rank_bg");
     var box_rank;
+    var page_size = 4;
     bg.inputEnabled = true;
     bg.events.onInputDown.add(function () {
 
@@ -308,34 +295,26 @@ function boxRank() {
         if (prevPage < 0)
             return;
         box.page = prevPage;
-        bindRank(box.jTop, box.page, box_rank);
+        bindRank(box.jTop, box.page, page_size, box_rank);
         soundClick();
     }, this, 0);
     var btNext = dgame.add.button(740, 1472, "bt_next", function () {
         var nextPage = box.page + 1;
-        if (nextPage > box.jTop.length)
+        log("nexxtpage:" + nextPage + " length:" + box.jTop.length);
+        if (nextPage * page_size >= box.jTop.length)
             return;
         box.page = nextPage;
-        bindRank(box.jTop, box.page, box_rank);
+        bindRank(box.jTop, box.page, page_size, box_rank);
         soundClick();
     }, this, 0);
     //load json
-    var link = 'https://icod.mobi/gogiApi/top';
-    log(link);
-    dgame.load.json('rank_json', link);
-    dgame.load.start();
-    dgame.load.onFileComplete.add(function (progress, file_key, success, total_loaded_files, total_files) {
-        if (!success)
-            return;
-        if (file_key.includes("rank_json")) {
-            log(dgame.cache.getJSON("rank_json"));
-            var jRoot = dgame.cache.getJSON("rank_json");
-            var top = jRoot.top;
-            box.jTop = top;
-            box_rank = dgame.add.group();
-            box.add(box_rank);
-            bindRank(top, 0, box_rank);
-        }
+    DSocket(JSON.stringify({"id": "getTop"}), function (ev) {
+        var jRoot = JSON.parse(ev.data);
+        var top = jRoot.top;
+        box.jTop = top;
+        box_rank = dgame.add.group();
+        box.add(box_rank);
+        bindRank(top, 0, page_size, box_rank);
     });
 
     box.add(bg);
@@ -346,10 +325,9 @@ function boxRank() {
     dgame.boxRank = box;
 }
 
-function bindRank(arr, page, box) {
+function bindRank(arr, page, page_size, box) {
     if (arr == null)
         return;
-    var page_size = 4
     box.callAll("kill");
     var key = "rank_key";
     var y1 = 621;
@@ -364,12 +342,10 @@ function bindRank(arr, page, box) {
     dgame.load.onFileComplete.add(function (progress, file_key, success, total_loaded_files, total_files) {
         if (file_key.includes(key)) {
             count += 1;
-            if (success) {
-                var image = dgame.add.sprite(288, file_key == key + 0 ? y1 : file_key == key + 1 ? y2 : file_key == key + 2 ? y3 : y4, file_key);
-                var cache_image = dgame.cache.getImage(file_key);
-                image.scale.setTo(129 / cache_image.width, 144 / cache_image.height);
-                box.add(image);
-            }
+            var image = dgame.add.sprite(288, file_key == key + 0 ? y1 : file_key == key + 1 ? y2 : file_key == key + 2 ? y3 : y4, success ? file_key : "davatar");
+            var cache_image = dgame.cache.getImage(success ? file_key : "davatar");
+            image.scale.setTo(129 / cache_image.width, 144 / cache_image.height);
+            box.add(image);
             if (count == page_size) {
                 //add vertical bg
                 var x = 242;
@@ -405,23 +381,4 @@ function bindRank(arr, page, box) {
         }
     });
 
-}
-
-function testJson() {
-    var link = "https://icod.mobi/gogiApi/gamestart?player_id=0979477303&display_name=dongdev&avatar=&source=gstand";
-    //$.ajax({
-    //    url: link, success: function (result) {
-    //        $('#h2').text(result);
-    //        dgame.add.text(0, 0, result, style_gift);
-    //    }
-    //});
-
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            dgame.add.text(0, 0, this.responseText, style_gift);
-        }
-    };
-    xhttp.open("GET", link, true);
-    xhttp.send();
 }

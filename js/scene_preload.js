@@ -2,28 +2,12 @@ var that;
 var Preload = {
     preload: function () {
         that = this;
-        dgame.load.image("bg", "assets/imgs/bg.png");
-        dgame.load.image("player", "assets/imgs/gogi.png");
-        dgame.load.image("bg_cloud", "assets/imgs/nui_may.png");
-        dgame.load.image("wall", "assets/imgs/hut-mui.png");
-        dgame.load.image("wall1", "assets/imgs/hut-mui1.png");
-        dgame.load.image("meat", "assets/imgs/thit.png");
-        dgame.load.image("ball", "assets/imgs/bong.png");
-        dgame.load.image("coca", "assets/imgs/coke.png");
-        dgame.load.image("bg_san_vd", "assets/imgs/san-vd.png");
-        dgame.load.image("bg_road", "assets/imgs/nen.png");
-        dgame.load.image("bg_top", "assets/imgs/red-line.png");
+        dgame.load.image("davatar", "assets/imgs/davatar.jpg");
         /*TODO:BUTTON*/
         dgame.load.spritesheet("bt_sound", "assets/imgs/bt_sound.png", 92, 77);
         dgame.load.spritesheet("bt_play", "assets/imgs/bt_playgame.png", 62, 62);
         dgame.load.image("closeButton", "assets/imgs/closeButton.png");
-        dgame.load.image("boxBack", "assets/imgs/boxBack.png");
-        /*TODO: ENDGAME*/
-        dgame.load.image("endgame_bg", "assets/imgs/endgame_bg.png");
-        dgame.load.image("endgame_bg_rank", "assets/imgs/endgame_bg_rank.png");
-        dgame.load.spritesheet("endgame_share", "assets/imgs/bt_share.png", 470, 93);
-        dgame.load.spritesheet("endgame_gift", "assets/imgs/bt_nhanqua.png", 515, 167);
-        dgame.load.spritesheet("endgame_replay", "assets/imgs/bt_choilai.png", 470, 93);
+
         /*TODO: MENU*/
         dgame.load.image("menu_bg", "assets/imgs/menu_bg.png");
         dgame.load.image("menu_logo", "assets/imgs/logo.png");
@@ -45,7 +29,7 @@ var Preload = {
         /*TODO: CART*/
         dgame.load.image("cart_bg", "assets/imgs/cart_bg.png");
 
-        that.load_sound();
+        loadSound();
 
         dgame.load.onFileComplete.add(function (progress, file_key, success, total_loaded_files, total_files) {
             if (!success)
@@ -64,15 +48,7 @@ var Preload = {
             }
         });
     },
-    load_sound: function () {
-        dgame.load.audio('bg', 'assets/snds/music_background.mp3');
-        dgame.load.audio('coin', 'assets/snds/coin.mp3');
-        dgame.load.audio('click', 'assets/snds/click.mp3');
-        dgame.load.audio('crash', 'assets/snds/crash.mp3');
-        dgame.load.audio('fall', 'assets/snds/fall.mp3');
-        dgame.load.audio('flap', 'assets/snds/flap.mp3');
-        dgame.load.audio('win', 'assets/snds/win.mp3');
-    },
+
     create: function () {
         if (isFNInstant && dgame.FBInstant != null) {
             dgame.FBInstant.setLoadingProgress(100);
@@ -91,4 +67,47 @@ var Preload = {
             dgame.state.start(SCENE_MENU);
         }
     }
+}
+function loadResourcePlay() {
+    /*TODO:PLAY*/
+    dgame.load.image("bg", "assets/imgs/bg.png");
+    dgame.load.image("player", "assets/imgs/gogi.png");
+    dgame.load.image("bg_cloud", "assets/imgs/nui_may.png");
+    dgame.load.image("wall", "assets/imgs/hut-mui.png");
+    dgame.load.image("wall1", "assets/imgs/hut-mui1.png");
+    dgame.load.image("meat", "assets/imgs/thit.png");
+    dgame.load.image("ball", "assets/imgs/bong.png");
+    dgame.load.image("coca", "assets/imgs/coke.png");
+    dgame.load.image("bg_san_vd", "assets/imgs/san-vd.png");
+    dgame.load.image("bg_road", "assets/imgs/nen.png");
+    dgame.load.image("bg_top", "assets/imgs/red-line.png");
+    loadRourceEndGame();
+}
+function loadRourceEndGame() {
+    /*TODO: ENDGAME*/
+    dgame.load.image("endgame_bg", "assets/imgs/endgame_bg.png");
+    dgame.load.image("endgame_bg_rank", "assets/imgs/endgame_bg_rank.png");
+    dgame.load.spritesheet("endgame_share", "assets/imgs/bt_share.png", 470, 93);
+    dgame.load.spritesheet("endgame_gift", "assets/imgs/bt_nhanqua.png", 515, 167);
+    dgame.load.spritesheet("endgame_replay", "assets/imgs/bt_choilai.png", 470, 93);
+}
+function loadSound() {
+    dgame.load.audio('bg', 'assets/snds/music_background.mp3');
+    dgame.load.audio('coin', 'assets/snds/coin.mp3');
+    dgame.load.audio('click', 'assets/snds/click.mp3');
+    dgame.load.audio('crash', 'assets/snds/crash.mp3');
+    dgame.load.audio('fall', 'assets/snds/fall.mp3');
+    dgame.load.audio('flap', 'assets/snds/flap.mp3');
+    dgame.load.audio('win', 'assets/snds/win.mp3');
+}
+
+function removeMenuAsset() {
+    dgame.cache.removeImage("menu_bg");
+    dgame.cache.removeImage("menu_logo");
+    dgame.cache.removeImage("menu_play");
+    dgame.cache.removeImage("menu_tutorial");
+    dgame.cache.removeImage("menu_gift");
+    dgame.cache.removeImage("menu_rank");
+    //RULE
+    dgame.cache.removeImage("rule_bg");
 }

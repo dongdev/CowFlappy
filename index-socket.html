@@ -1,0 +1,49 @@
+<!DOCTYPE HTML>
+
+<html>
+<head>
+    <script src="js/jquery-2.0.0.min.js"></script>
+    <script src="js/socket.js"></script>
+    <script src="https://connect.facebook.net/en_US/fbinstant.6.0.js"></script>
+</head>
+
+<body>
+<script>
+    FBInstant.initializeAsync().then(function () {
+        FBInstant.setLoadingProgress(100);
+        FBInstant.startGameAsync().then(function () {
+            var contextId = FBInstant.context.getID();
+            var contextType = FBInstant.context.getType();
+            playerName = FBInstant.player.getName();
+            playerPic = FBInstant.player.getPhoto();
+            playerId = FBInstant.player.getID();
+            console.log(contextId + "/" + playerName + "/" + playerPic);
+            startGame(FBInstant);
+        });
+    }).catch(function (error) {
+        alert("catch");
+    });
+</script>
+<div id="sse">
+    <script>
+        function sendFirstMs() {
+            var init = JSON.stringify({
+                "id": "inithomepage",
+                "version": "1",
+                "platform": "android",
+                "package_name": "com.live.footballtips"
+            });
+
+            var init2 = JSON.stringify({"id": "getTop"});
+
+            DSocket(init2, function (ev) {
+                console.log("Event callback: " + ev.data);
+            });
+        }
+    </script>
+    <a href="javascript:sendFirstMs()">Run WebSocket</a>
+</div>
+<p id="text">Hello</p>
+
+</body>
+</html>

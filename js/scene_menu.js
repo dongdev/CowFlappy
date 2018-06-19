@@ -21,7 +21,6 @@ var Menu = {
         var bt_tut = dgame.add.button(760, 1488, "menu_tutorial", function () {
             boxRule();
             soundClick();
-            testJson();
         }, this, 1, 0, 1, 0);
 
         //sound
@@ -42,5 +41,6 @@ var Menu = {
         }, dgame);
         dgame.bt_sound.frame = dgame.sound.mute ? 1 : 0;
 
+        loadSound();
     }
 }

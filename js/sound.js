@@ -19,7 +19,8 @@ function soundBg() {
     dgame.soundBg = sound;
 }
 function pauseBg() {
-    dgame.soundBg.pause();
+    if (dgame.soundBg != null)
+        dgame.soundBg.stop();
 }
 function soundCoin() {
     if (!canPlay())
