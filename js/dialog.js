@@ -46,67 +46,69 @@ function boxEndGame(score) {
 
     //rank
     //size of frame 200x244
-
     var x1 = 172;
     var x2 = 432;
     var x3 = 724;
     var y = 1596;
     var key_ava = "end_ava_key";
 
-    var link = 'http://gogi.icod.mobi/gogiApi/gameend?session_id=' + dgame.session_id + "&points=" + score;
-    var link_end_rank = 'http://gogi.icod.mobi/gogiApi/top';
-    log(link);
-    log(link_end_rank);
-    dgame.load.json('link_end_rank', link_end_rank);
-    dgame.load.json('end_notify_json', link);
-    dgame.load.start();
-    var count;
-    dgame.load.onFileComplete.add(function (progress, file_key, success, total_loaded_files, total_files) {
-        if (!success)
-            return;
-        log("reponsce:" + file_key)
-        if (file_key.includes(key_ava)) {
-            var pos = file_key.replace(key_ava, "");
-            var ava_rank1 = dgame.add.sprite(pos == 0 ? x1 : pos == 1 ? x2 : x3, y, file_key);
-            var cache_ava_rank1 = dgame.cache.getImage(file_key);
-            ava_rank1.scale.setTo(200 / cache_ava_rank1.width, 244 / cache_ava_rank1.height);
-            box.add(ava_rank1);
-            if (count == 3) {
-                var endgame_bg_rank1 = dgame.add.sprite(87, 1536, "endgame_bg_rank");
-                box.add(endgame_bg_rank1);
-            }
-            else {
-                count += 1;
-            }
+    if (sessionId != null) {
+        var link = 'https://icod.mobi/gogiApi/gameend?session_id=' + sessionId + "&points=" + score;
+        var link_end_rank = 'https://icod.mobi/gogiApi/top';
+        log(link_end_rank);
+        dgame.load.json('link_end_rank', link_end_rank);
+        if (sessionId != null) {
+            dgame.load.json('end_notify_json', link);
+            log(link);
         }
-        else if (file_key.includes("end_json")) {
-            log(dgame.cache.getJSON("end_json"));
-        } else if (file_key.includes("end_notify_json")) {
-            log(dgame.cache.getJSON("end_notify_json"));
-        }
-        else if (file_key.includes("link_end_rank")) {
-            log(dgame.cache.getJSON("link_end_rank"));
-            var jRoot = dgame.cache.getJSON("link_end_rank");
-            var top = jRoot.top;
-            top.forEach(function (p1, p2, p3) {
-                if (p2 < 3) {
-                    //var avatar = "http://phaser.io/images/img.png";
-                    var avatar = p1.avatar;
-                    if (avatar == null || avatar.includes("null")) {
-                        count += 1;
-                    }
-                    else {
-                        var rand = dgame.rnd.integerInRange(0, 36890);
-                        var regex = avatar.includes("?") ? "&v=" + rand : "?v=" + rand;
-                        dgame.load.image(key_ava + p2, avatar + regex, true);
-                        dgame.load.start();
-                    }
+        dgame.load.start();
+        var count = 0;
+        dgame.load.onFileComplete.add(function (progress, file_key, success, total_loaded_files, total_files) {
+            if (!success)
+                return;
+            log("reponsce:" + file_key)
+            if (file_key.includes(key_ava)) {
+                var pos = file_key.replace(key_ava, "");
+                var ava_rank1 = dgame.add.sprite(pos == 0 ? x1 : pos == 1 ? x2 : x3, y, file_key);
+                var cache_ava_rank1 = dgame.cache.getImage(file_key);
+                ava_rank1.scale.setTo(200 / cache_ava_rank1.width, 244 / cache_ava_rank1.height);
+                box.add(ava_rank1);
+                if (count == 3) {
+                    var endgame_bg_rank1 = dgame.add.sprite(87, 1536, "endgame_bg_rank");
+                    box.add(endgame_bg_rank1);
                 }
-            });
-        }
+                else {
+                    count += 1;
+                }
+            }
+            else if (file_key.includes("end_json")) {
+                log(dgame.cache.getJSON("end_json"));
+            } else if (file_key.includes("end_notify_json")) {
+                log(dgame.cache.getJSON("end_notify_json"));
+            }
+            else if (file_key.includes("link_end_rank")) {
+                log(dgame.cache.getJSON("link_end_rank"));
+                var jRoot = dgame.cache.getJSON("link_end_rank");
+                var top = jRoot.top;
+                top.forEach(function (p1, p2, p3) {
+                    if (p2 < 3) {
+                        //var avatar = "http://phaser.io/images/img.png";
+                        var avatar = p1.avatar;
+                        if (avatar == null || avatar.includes("null")) {
+                            count += 1;
+                        }
+                        else {
+                            var rand = dgame.rnd.integerInRange(0, 36890);
+                            var regex = avatar.includes("?") ? "&v=" + rand : "?v=" + rand;
+                            dgame.load.image(key_ava + p2, avatar + regex, true);
+                            dgame.load.start();
+                        }
+                    }
+                });
+            }
 
-    });
-
+        });
+    }
 
     var endgame_bg_rank = dgame.add.sprite(87, 1536, "endgame_bg_rank");
     box.add(bg);
@@ -171,24 +173,26 @@ function boxGift() {
     imgText.input.allowHorizontalDrag = false;
     imgText.input.boundsRect = bounds;
 
-    var link = 'http://gogi.icod.mobi/gogiApi/getRewards?session_id=' + dgame.session_id;
-    log(link);
-    dgame.load.json('gift_json', link);
-    dgame.load.start();
-    dgame.load.onFileComplete.add(function (progress, file_key, success, total_loaded_files, total_files) {
-        if (!success)
-            return;
-        if (file_key.includes("gift_json")) {
-            var msg = dgame.cache.getJSON("gift_json")[0].code;
-            if (new String(msg).valueOf() == new String("wrong session").valueOf()) {
-                text.setText("" + msg);
-            }
-            else {
-                text.setText("E-Coupon " + msg);
-            }
+    if (sessionId != null) {
+        var link = 'https://icod.mobi/gogiApi/getRewards?session_id=' + sessionId;
+        log(link);
+        dgame.load.json('gift_json', link);
+        dgame.load.start();
+        dgame.load.onFileComplete.add(function (progress, file_key, success, total_loaded_files, total_files) {
+            if (!success)
+                return;
+            if (file_key.includes("gift_json")) {
+                var msg = dgame.cache.getJSON("gift_json")[0].code;
+                if (new String(msg).valueOf() == new String("wrong session").valueOf()) {
+                    text.setText("" + msg);
+                }
+                else {
+                    text.setText("E-Coupon " + msg);
+                }
 
-        }
-    });
+            }
+        });
+    }
 
     box.add(bg);
     box.add(close);
@@ -234,23 +238,25 @@ function boxCartGift() {
     }, this, 0);
 
     //json
-    var linkCart = "http://gogi.icod.mobi/gogiApi/getMyRewards?player_id=123123213123";
-    log(linkCart);
-    dgame.load.json('link_cart_gift', linkCart);
-    dgame.load.onFileComplete.add(function (progress, file_key, success, total_loaded_files, total_files) {
-        if (!success)
-            return;
-        if (file_key.includes("link_cart_gift")) {
-            log(dgame.cache.getJSON("link_cart_gift"));
-            var jRoot = dgame.cache.getJSON("link_cart_gift");
-            var vouchers = jRoot.vouchers;
-            box.jVouchers = vouchers;
-            box_voucher = dgame.add.group();
-            box.add(box_voucher);
-            bindCart(vouchers, 0, page_size, box_voucher);
-        }
-    });
-    dgame.load.start();
+    if (playerId != null) {
+        var linkCart = "https://icod.mobi/gogiApi/getMyRewards?player_id=" + playerId;
+        log(linkCart);
+        dgame.load.json('link_cart_gift', linkCart);
+        dgame.load.onFileComplete.add(function (progress, file_key, success, total_loaded_files, total_files) {
+            if (!success)
+                return;
+            if (file_key.includes("link_cart_gift")) {
+                log(dgame.cache.getJSON("link_cart_gift"));
+                var jRoot = dgame.cache.getJSON("link_cart_gift");
+                var vouchers = jRoot.vouchers;
+                box.jVouchers = vouchers;
+                box_voucher = dgame.add.group();
+                box.add(box_voucher);
+                bindCart(vouchers, 0, page_size, box_voucher);
+            }
+        });
+        dgame.load.start();
+    }
 
     box.add(bg);
     box.add(close);
@@ -314,7 +320,7 @@ function boxRank() {
         soundClick();
     }, this, 0);
     //load json
-    var link = 'http://gogi.icod.mobi/gogiApi/top';
+    var link = 'https://icod.mobi/gogiApi/top';
     log(link);
     dgame.load.json('rank_json', link);
     dgame.load.start();
@@ -354,24 +360,24 @@ function bindRank(arr, page, box) {
     var tx_x = 444;
     var tx_y = ["631|711", "810|890", "1011|1091", "1200|1280"]
 
-    var count;
+    var count = 0;
     dgame.load.onFileComplete.add(function (progress, file_key, success, total_loaded_files, total_files) {
-        if (!success)
-            return;
         if (file_key.includes(key)) {
-            var image = dgame.add.sprite(288, file_key == key + 0 ? y1 : file_key == key + 1 ? y2 : file_key == key + 2 ? y3 : y4, file_key);
-            var cache_image = dgame.cache.getImage(file_key);
-            image.scale.setTo(129 / cache_image.width, 144 / cache_image.height);
-            box.add(image);
-            if (count == arr.size) {
+            count += 1;
+            if (success) {
+                var image = dgame.add.sprite(288, file_key == key + 0 ? y1 : file_key == key + 1 ? y2 : file_key == key + 2 ? y3 : y4, file_key);
+                var cache_image = dgame.cache.getImage(file_key);
+                image.scale.setTo(129 / cache_image.width, 144 / cache_image.height);
+                box.add(image);
+            }
+            if (count == page_size) {
                 //add vertical bg
-                var x = 244;
+                var x = 242;
                 var y = 572;
                 var temBg = dgame.add.sprite(x, y, "rank_bg_temp");
                 box.add(temBg);
             }
         }
-        count += 1;
     });
 
     arr.forEach(function (p1, pos, p3) {
@@ -399,4 +405,23 @@ function bindRank(arr, page, box) {
         }
     });
 
+}
+
+function testJson() {
+    var link = "https://icod.mobi/gogiApi/gamestart?player_id=0979477303&display_name=dongdev&avatar=&source=gstand";
+    //$.ajax({
+    //    url: link, success: function (result) {
+    //        $('#h2').text(result);
+    //        dgame.add.text(0, 0, result, style_gift);
+    //    }
+    //});
+
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            dgame.add.text(0, 0, this.responseText, style_gift);
+        }
+    };
+    xhttp.open("GET", link, true);
+    xhttp.send();
 }

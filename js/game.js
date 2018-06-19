@@ -15,6 +15,7 @@ function startGame(FBInstant) {
         GAME_ID,
         STATE
     );
+
     dgame.FBInstant = FBInstant;
     dgame.state.add(SCENE_PRELOAD, Preload);
     dgame.state.add(SCENE_MENU, Menu);

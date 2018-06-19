@@ -5,10 +5,12 @@ function canPlay() {
 function soundBg() {
     if (!canPlay())
         return;
-    if(dgame.soundBg!= null)
-    {
+    if (dgame.soundBg != null) {
         dgame.soundBg.stop();
         dgame.soundBg = null;
+    }
+    if (dgame.soundWin != null) {
+        dgame.soundWin.stop();
     }
     var sound = dgame.add.audio('bg', 1, true);
     sound.allowMultiple = true;

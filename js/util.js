@@ -28,12 +28,13 @@ var WALL_VELOCITY_MIN = 400;
 var playerName = null;
 var playerPic = null;
 var playerId = null;
+var sessionId = null;
 //margin
 var PLAYER_DEFAULT_Y = 712;
 var CLOUD_MARGIN_TOP = 160;
 var MEDIUM_MARGIN_TOP = 921;
 var ROAD_MARGIN_TOP = 1572;
-var JET = 900;
+var JET = 850;
 var EASY = 20;
 var FONT = {
     font: "86px mijas", fill: '#ffffff'
@@ -42,3 +43,4 @@ var FONT = {
 function log(msg) {
     console.log(msg);
 }
+

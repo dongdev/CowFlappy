@@ -47,16 +47,20 @@ var Preload = {
 
         that.load_sound();
 
-        dgame.load.start();
         dgame.load.onFileComplete.add(function (progress, file_key, success, total_loaded_files, total_files) {
             if (!success)
                 return;
-            if (dgame.FBInstant != null) {
-                if (progress < 0)
-                    progress = 0;
-                else if (progress > 100)
-                    progress = 100;
-                FBInstant.setLoadingProgress(progress);
+            try {
+                if (dgame.FBInstant != null) {
+                    if (progress < 0)
+                        progress = 0;
+                    else if (progress > 100)
+                        progress = 100;
+                    FBInstant.setLoadingProgress(Math.floor(progress));
+                }
+            }
+            catch (e) {
+                log(e);
             }
         });
     },
@@ -71,6 +75,7 @@ var Preload = {
     },
     create: function () {
         if (isFNInstant && dgame.FBInstant != null) {
+            dgame.FBInstant.setLoadingProgress(100);
             dgame.FBInstant.startGameAsync().then(function () {
                 var contextId = FBInstant.context.getID();
                 var contextType = FBInstant.context.getType();
@@ -79,7 +84,7 @@ var Preload = {
                 playerId = FBInstant.player.getID();
                 log(contextId + "/" + playerName + "/" + playerPic);
                 dgame.state.start(SCENE_MENU);
-                game.start();
+                //game.start();
             });
         }
         else {
