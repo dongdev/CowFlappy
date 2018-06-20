@@ -6,7 +6,7 @@ function initFBSdk() {
             xfbml: true,
             version: 'v3.0'
         });
-        checkLogin();
+        startGame(null);
     };
 
     (function (d, s, id) {
@@ -20,7 +20,7 @@ function initFBSdk() {
         fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
 }
-function checkLogin() {
+function checkLoginFB() {
     FB.getLoginStatus(function (response) {
         if (response.status === 'connected') {
             // the user is logged in and has authenticated your
@@ -30,17 +30,17 @@ function checkLogin() {
             // and signed request each expire
             var uid = response.authResponse.userID;
             var accessToken = response.authResponse.accessToken;
-            login();
+            loginFb();
         } else if (response.status === 'not_authorized') {
             log(NOT_LOGIN);
-            login();
+            loginFb();
         } else {
             log(ERROR);
             alert(ERROR)
         }
     });
 }
-function login() {
+function loginFb() {
     FB.login(function (response) {
         if (response.authResponse) {
             console.log('Welcome!  Fetching your information.... ');
@@ -52,7 +52,11 @@ function login() {
                     + '/' + response.picture.data.url
                 )
                 ;
-                startGame(null);
+                playerId = response.id;
+                playerName = response.name;
+                playerEmail = response.email;
+                playerPic = response.picture.data.url;
+                dgame.state.start(SCENE_MENU);
             });
         } else {
             alert(LOGIN_FAIL)

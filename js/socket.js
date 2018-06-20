@@ -1,9 +1,7 @@
 function socketIO(pack) {
-
     if ("WebSocket" in window) {
         //ws = new WebSocket("wss://bongda.vnnplus.vn:8443/one2many");
-        //ws = new WebSocket("wss://icod.mobi:8443/");
-        ws = new WebSocket("ws://icod.mobi:8445/");
+        ws = new WebSocket("wss://icod.mobi:8443/");
         ws.onopen = function () {
             var ms = "Socket Open";
             console.log(ms);

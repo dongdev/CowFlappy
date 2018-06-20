@@ -81,7 +81,7 @@ var SceneGame = {
     //TODO: check collide
     collide_meat: function () {
         dgame.physics.arcade.collide(dgame.player, dgame.meats, function (player, meat) {
-            that.move_bonus(meat.x + meat.width / 2, meat.y - meat.height / 2)
+            //that.move_bonus(meat.x + meat.width / 2, meat.y - meat.height / 2)
             meat.kill();
             dgame.score += 1;
             dgame.player.body.velocity.x = 0;
@@ -181,6 +181,18 @@ var SceneGame = {
     }
     ,
 
+    render: function () {
+        if (DEBUG) {
+            dgame.debug.body(dgame.player);
+            dgame.meats.forEachAlive(function (meat, b) {
+                dgame.debug.body(meat);
+            });
+            dgame.meats_right.forEachAlive(function (meat, b) {
+                dgame.debug.body(meat);
+            });
+        }
+    },
+
     create: function () {
         //init physics
         dgame.scale.pageAlignHorizontally = true;
@@ -246,7 +258,7 @@ var SceneGame = {
         dgame.player.body.allowGravity = false;
         dgame.player.anchor.setTo(0.5, 0);
         dgame.player.body.collideWorldBounds = true;
-        dgame.player.body.offset.y = 20;
+        dgame.player.body.offset.setTo(-10, -10);
 
         //score
         dgame.score = 0;
@@ -388,12 +400,13 @@ var SceneGame = {
         var meat = dgame.meats.getFirstDead();
         if (!meat) {
             meat = dgame.meats.create(0, 0, "meat");
+            meat.anchor.setTo(0.5, 0.5);
             dgame.physics.arcade.enableBody(meat);
             meat.body.allowGravity = false;
-            meat.body.offset.setTo(100, 100);
+            meat.body.setSize(200, 100, 50, 50); //w h x y
         }
-        var yMeat = y1 - OPENING / 2 - meat.height / 2;
-        var xMeat = x + wall1.width / 2 - meat.width / 2;
+        var yMeat = y1 - OPENING / 2;
+        var xMeat = x + wall1.width / 2;
         meat.reset(xMeat, yMeat);
 
         //TODO: Meat right
@@ -406,12 +419,14 @@ var SceneGame = {
                 else
                     item = "coca";
                 nextMeat = dgame.meats_right.create(0, 0, item);
+                nextMeat.anchor.set(0.5, 0.5);
                 dgame.physics.arcade.enableBody(nextMeat);
                 nextMeat.body.allowGravity = false;
-                nextMeat.body.offset.setTo(100, 100);
+                //nextMeat.body.offset.setTo(-50, -50);
+                nextMeat.body.setSize(150, 150, 50, 50); //w h x y
             }
             yMeat = dgame.rnd.integerInRange(250, GAME_HEIGHT - nextMeat.height - 400);
-            xMeat = x + wall1.width + WALL_MARGIN_LEFT / 2 - nextMeat.width / 2;
+            xMeat = x + wall1.width + WALL_MARGIN_LEFT / 2;
             nextMeat.reset(xMeat, yMeat);
         }
 

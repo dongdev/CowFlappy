@@ -11,13 +11,14 @@ var SCENE_LOGIN = "login";
 //var
 //var GAME_WIDTH = window.innerWidth;
 //var GAME_HEIGHT = window.innerHeight;
-var isFNInstant = false;
+var isFNInstant = true;
+var DEBUG = false;
 var SOURCE = ["fbm", "gstand"];
 var GAME_WIDTH = 1080;
 var GAME_HEIGHT = 1920;
 var OPENING = 600;//524
 var GAME_ID = 'game-canvas';
-var GAME_ID2 = 'game-canvas';//asd
+var GAME_ID2 = 'asd';//asd
 var BACKGROUND_STEP = 2;
 var CLOUD_STEP = 2;
 var BOTTOM_STEP = 4;
@@ -29,6 +30,7 @@ var WALL_VELOCITY_MIN = 400;
 //
 var playerName = null;
 var playerPic = null;
+var playerEmail = null;
 var playerId = null;
 var sessionId = null;
 //margin
@@ -44,5 +46,14 @@ var FONT = {
 
 function log(msg) {
     console.log(msg);
+}
+
+function validateEmail(email) {
+    var re = /\S+@\S+\.\S+/;
+    return re.test(email);
+}
+function validatePhone(phone) {
+    var re = /[0][0-9]{9,10}/;
+    return re.test(phone);
 }
 

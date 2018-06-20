@@ -221,7 +221,7 @@ function boxRank() {
         bindRank(jTopRank, box.page, pageRankSize, panelBoxRank);
         soundClick();
     }, this, 0);
-    var btNext = dgame.add.button(740, 1472, "bt_next", function () {
+    var btNext = dgame.add.button(730, 1472, "bt_next", function () {
         var nextPage = box.page + 1;
         log("nexxtpage:" + nextPage + " length:" + jTopRank.length);
         if (nextPage * pageRankSize >= jTopRank.length)
