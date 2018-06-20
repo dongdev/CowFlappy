@@ -342,7 +342,10 @@ function bindRank(arr, page, page_size, box) {
     dgame.load.onFileComplete.add(function (progress, file_key, success, total_loaded_files, total_files) {
         if (file_key.includes(key)) {
             count += 1;
-            var image = dgame.add.sprite(288, file_key == key + 0 ? y1 : file_key == key + 1 ? y2 : file_key == key + 2 ? y3 : y4, success ? file_key : "davatar");
+            var pos = file_key.replace(key, "");
+            pos = pos >= page_size ? pos % page_size : pos;
+            log("load_image_rank_cb:" + file_key + " pos:" + pos);
+            var image = dgame.add.sprite(288, pos == 0 ? y1 : pos == 1 ? y2 : pos == 2 ? y3 : y4, success ? file_key : "davatar");
             var cache_image = dgame.cache.getImage(success ? file_key : "davatar");
             image.scale.setTo(129 / cache_image.width, 144 / cache_image.height);
             box.add(image);
