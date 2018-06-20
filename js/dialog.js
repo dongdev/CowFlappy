@@ -1,7 +1,7 @@
 var style = {font: "bold 80px mijas", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle"};
 var style_gift = {font: "bold 80px mijas", fill: "#f15858", boundsAlignH: "center", boundsAlignV: "middle"};
-var style_rank1 = {font: "bold 65pt mijas", fill: "#ffffff", boundsAlignH: "center", boundsAlignV: "middle"};
-var style_rank2 = {font: "bold 45pt mijas", fill: "#ffffff", boundsAlignH: "center", boundsAlignV: "middle"};
+var style_rank1 = {font: "bold 65px mijas", fill: "#ffffff", boundsAlignH: "center", boundsAlignV: "middle"};
+var style_rank2 = {font: "bold 45px mijas", fill: "#ffffff", boundsAlignH: "center", boundsAlignV: "middle"};
 function boxEndGame(score) {
     if (dgame.boxEnd != null)
         return;
@@ -44,56 +44,14 @@ function boxEndGame(score) {
         soundClick();
     }, this, 1, 0, 1, 0);
 
-    //rank
-    //size of frame 200x244
-    var x1 = 172;
-    var x2 = 432;
-    var x3 = 724;
-    var y = 1596;
-    var key_ava = "end_ava_key";
-
     if (sessionId != null) {
         var pack = JSON.stringify({
             "id": "gameend",
             "session_id": sessionId,
             "points": score
         });
-        DSocket(pack, function (ev) {
-            if (ev.data.includes("gameendResponse")) {
-                var jRoot = JSON.parse(ev.data)
-                var top = jRoot.top;
-                top.forEach(function (p1, p2, p3) {
-                    if (p2 < 3) {
-                        //var avatar = "http://phaser.io/images/img.png";
-                        var avatar = p1.avatar;
-                        if (avatar == null || avatar.includes("null")) {
-                            count += 1;
-                        }
-                        else {
-                            var rand = dgame.rnd.integerInRange(0, 36890);
-                            var regex = avatar.includes("?") ? "&v=" + rand : "?v=" + rand;
-                            dgame.load.image(key_ava + p2, avatar + regex, true);
-                            dgame.load.start();
-                        }
-                    }
-                });
-                var count = 0;
-                dgame.load.onFileComplete.add(function (progress, file_key, success, total_loaded_files, total_files) {
-                    if (file_key.includes(key_ava)) {
-                        count += 1;
-                        var pos = file_key.replace(key_ava, "");
-                        var ava_rank1 = dgame.add.sprite(pos == 0 ? x1 : pos == 1 ? x2 : x3, y, success ? file_key : "davatar");
-                        var cache_ava_rank1 = dgame.cache.getImage(success ? file_key : "davatar");
-                        ava_rank1.scale.setTo(200 / cache_ava_rank1.width, 244 / cache_ava_rank1.height);
-                        box.add(ava_rank1);
-                        if (count == 3) {
-                            var endgame_bg_rank1 = dgame.add.sprite(87, 1536, "endgame_bg_rank");
-                            box.add(endgame_bg_rank1);
-                        }
-                    }
-                });
-            }
-        });
+        panelBoxEndGame = box;
+        sendMs(pack);
     }
 
     var endgame_bg_rank = dgame.add.sprite(87, 1536, "endgame_bg_rank");
@@ -143,6 +101,7 @@ function boxGift() {
     var text = dgame.add.text(0, 0, "", style_gift);
     text.setShadow(3, 3, 'rgba(0,0,0,0.5)', 2);
     text.setTextBounds(164, 623, 737, 54);
+    textGift = text;
 
     var imgText = dgame.add.sprite(237, 795, "gift_text");
 
@@ -160,24 +119,7 @@ function boxGift() {
     imgText.input.boundsRect = bounds;
 
     if (sessionId != null) {
-        var link = 'https://icod.mobi/gogiApi/getRewards?session_id=' + sessionId;
-        log(link);
-        dgame.load.json('gift_json', link);
-        dgame.load.start();
-        dgame.load.onFileComplete.add(function (progress, file_key, success, total_loaded_files, total_files) {
-            if (!success)
-                return;
-            if (file_key.includes("gift_json")) {
-                var msg = dgame.cache.getJSON("gift_json")[0].code;
-                if (new String(msg).valueOf() == new String("wrong session").valueOf()) {
-                    text.setText("" + msg);
-                }
-                else {
-                    text.setText("E-Coupon " + msg);
-                }
-
-            }
-        });
+        sendMs(JSON.stringify({"id": "getRewards", "session_id": sessionId}));
     }
 
     box.add(bg);
@@ -195,8 +137,6 @@ function boxCartGift() {
         return;
     var box = dgame.add.group();
     var bg = dgame.add.sprite(0, 0, "cart_bg");
-    var box_voucher;
-    var page_size = 4;
     bg.inputEnabled = true;
     bg.events.onInputDown.add(function () {
 
@@ -212,36 +152,21 @@ function boxCartGift() {
         if (prevPage < 0)
             return;
         box.page = prevPage;
-        bindCart(box.jVouchers, box.page, page_size, box_voucher);
+        bindCart(jVouchers, box.page, pageCartSize, panelBoxVoucher);
     }, this, 0);
     var btNext = dgame.add.button(736, 1472, "bt_next", function () {
         soundClick();
         var nextpage = box.page + 1;
-        if (box.jVouchers == null || box.jVouchers.length < nextpage * page_size)
+        if (jVouchers == null || jVouchers.length < nextpage * pageCartSize)
             return;
         box.page = nextpage;
-        bindCart(box.jVouchers, box.page, page_size, box_voucher);
+        bindCart(jVouchers, box.page, pageCartSize, panelBoxVoucher);
     }, this, 0);
 
     //json
     if (playerId != null) {
-        var linkCart = "https://icod.mobi/gogiApi/getMyRewards?player_id=" + playerId;
-        log(linkCart);
-        dgame.load.json('link_cart_gift', linkCart);
-        dgame.load.onFileComplete.add(function (progress, file_key, success, total_loaded_files, total_files) {
-            if (!success)
-                return;
-            if (file_key.includes("link_cart_gift")) {
-                log(dgame.cache.getJSON("link_cart_gift"));
-                var jRoot = dgame.cache.getJSON("link_cart_gift");
-                var vouchers = jRoot.vouchers;
-                box.jVouchers = vouchers;
-                box_voucher = dgame.add.group();
-                box.add(box_voucher);
-                bindCart(vouchers, 0, page_size, box_voucher);
-            }
-        });
-        dgame.load.start();
+        panelParentBoxVoucher = box;
+        sendMs(JSON.stringify({"id": "getMyRewards", "player_id": playerId}));
     }
 
     box.add(bg);
@@ -263,9 +188,9 @@ function bindCart(arr, page, page_size, box) {
     box.callAll("kill");
 
     arr.forEach(function (p1, pos, p3) {
+        log("foreach:"+p1.code);
         if (pos >= page * page_size && pos < (page + 1) * page_size) {
-            var voucher = arr[pos];
-            var text = dgame.add.text(0, 0, voucher.code, style_rank2);
+            var text = dgame.add.text(0, 0, p1.code, style_rank2);
             text.setTextBounds(x, y + h * (pos - page * page_size), w, h);
             box.add(text);
         }
@@ -279,8 +204,6 @@ function boxRank() {
         return;
     var box = dgame.add.group();
     var bg = dgame.add.sprite(0, 0, "rank_bg");
-    var box_rank;
-    var page_size = 4;
     bg.inputEnabled = true;
     bg.events.onInputDown.add(function () {
 
@@ -295,27 +218,22 @@ function boxRank() {
         if (prevPage < 0)
             return;
         box.page = prevPage;
-        bindRank(box.jTop, box.page, page_size, box_rank);
+        bindRank(jTopRank, box.page, pageRankSize, panelBoxRank);
         soundClick();
     }, this, 0);
     var btNext = dgame.add.button(740, 1472, "bt_next", function () {
         var nextPage = box.page + 1;
-        log("nexxtpage:" + nextPage + " length:" + box.jTop.length);
-        if (nextPage * page_size >= box.jTop.length)
+        log("nexxtpage:" + nextPage + " length:" + jTopRank.length);
+        if (nextPage * pageRankSize >= jTopRank.length)
             return;
         box.page = nextPage;
-        bindRank(box.jTop, box.page, page_size, box_rank);
+        bindRank(jTopRank, box.page, pageRankSize, panelBoxRank);
         soundClick();
     }, this, 0);
     //load json
-    DSocket(JSON.stringify({"id": "getTop"}), function (ev) {
-        var jRoot = JSON.parse(ev.data);
-        var top = jRoot.top;
-        box.jTop = top;
-        box_rank = dgame.add.group();
-        box.add(box_rank);
-        bindRank(top, 0, page_size, box_rank);
-    });
+    panelParentBoxRank = box;
+
+    sendMs(JSON.stringify({"id": "getTop"}));
 
     box.add(bg);
     box.add(close);
@@ -344,7 +262,7 @@ function bindRank(arr, page, page_size, box) {
             count += 1;
             var pos = file_key.replace(key, "");
             pos = pos >= page_size ? pos % page_size : pos;
-            log("load_image_rank_cb:" + file_key + " pos:" + pos);
+            //log("load_image_rank_cb:" + file_key + " pos:" + pos);
             var image = dgame.add.sprite(288, pos == 0 ? y1 : pos == 1 ? y2 : pos == 2 ? y3 : y4, success ? file_key : "davatar");
             var cache_image = dgame.cache.getImage(success ? file_key : "davatar");
             image.scale.setTo(129 / cache_image.width, 144 / cache_image.height);

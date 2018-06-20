@@ -2,7 +2,7 @@ var that;
 var Preload = {
     preload: function () {
         that = this;
-        dgame.load.image("davatar", "assets/imgs/davatar.jpg");
+        dgame.load.image("davatar", "assets/imgs/davatar.png");
         /*TODO:BUTTON*/
         dgame.load.spritesheet("bt_sound", "assets/imgs/bt_sound.png", 92, 77);
         dgame.load.spritesheet("bt_play", "assets/imgs/bt_playgame.png", 62, 62);
@@ -59,13 +59,15 @@ var Preload = {
                 playerPic = FBInstant.player.getPhoto();
                 playerId = FBInstant.player.getID();
                 log(contextId + "/" + playerName + "/" + playerPic);
+
                 dgame.state.start(SCENE_MENU);
-                //game.start();
             });
         }
         else {
-            dgame.state.start(SCENE_MENU);
+            dgame.state.start(SCENE_LOGIN);
         }
+
+        socketIO();
     }
 }
 function loadResourcePlay() {
@@ -81,7 +83,13 @@ function loadResourcePlay() {
     dgame.load.image("bg_san_vd", "assets/imgs/san-vd.png");
     dgame.load.image("bg_road", "assets/imgs/nen.png");
     dgame.load.image("bg_top", "assets/imgs/red-line.png");
+    dgame.load.image("bonus", "assets/imgs/bonus.png");
     loadRourceEndGame();
+}
+function loadResourceLogin() {
+    dgame.load.image("login_bg", "assets/imgs/sign_bg.png");
+    dgame.load.spritesheet("sign_bt", "assets/imgs/bt_dn.png", 353, 111);
+    dgame.load.spritesheet("sign_fb_bt", "assets/imgs/bt_fb.png", 606, 120);
 }
 function loadRourceEndGame() {
     /*TODO: ENDGAME*/
@@ -100,7 +108,6 @@ function loadSound() {
     dgame.load.audio('flap', 'assets/snds/flap.mp3');
     dgame.load.audio('win', 'assets/snds/win.mp3');
 }
-
 function removeMenuAsset() {
     dgame.cache.removeImage("menu_bg");
     dgame.cache.removeImage("menu_logo");

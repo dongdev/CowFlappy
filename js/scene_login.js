@@ -1,27 +1,29 @@
-var Menu = {
+var Login = {
+    preload: function () {
+        loadResourceLogin();
+    },
     create: function () {
         dgame.scale.pageAlignHorizontally = true;
         dgame.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
         dgame.physics.startSystem(Phaser.Physics.ARCADE);
-        dgame.add.sprite(0, 0, "menu_bg");
-        dgame.add.sprite(96, 128, "menu_logo");
-        var bt_play = dgame.add.button((GAME_WIDTH - dgame.cache.getImage("menu_play").width / 2 ) / 2, 1184, "menu_play", function () {
-            dgame.state.start(SCENE_GAME);
+        dgame.add.sprite(0, 0, "login_bg");
+
+        dgame.add.button(369, 912, "sign_bt", function () {
+            soundClick();
+            playerId = "testId123";
+            playerName = "User XXX";
+            playerPic = null;
+            dgame.state.start(SCENE_MENU);
         }, this, 1, 0, 1, 0);
 
-        var bt_rank = dgame.add.button(148, 1488, "menu_rank", function () {
-            boxRank();
+        dgame.add.button(243, 1143, "sign_fb_bt", function () {
             soundClick();
+            var text = prompt("Input text here !!!");
+            log(text);
         }, this, 1, 0, 1, 0);
-        var bt_gift = dgame.add.button(444, 1572, "menu_gift", function () {
-            boxCartGift();
-            soundClick();
 
-        }, this, 1, 0, 1, 0);
-        var bt_tut = dgame.add.button(760, 1488, "menu_tutorial", function () {
-            boxRule();
-            soundClick();
-        }, this, 1, 0, 1, 0);
+        //textbox 1 243x645 -> size 603x93
+        //textbox 1 243x780-> size 603x93
 
         //sound
         dgame.bt_sound = dgame.add.sprite(32, 32, "bt_sound");

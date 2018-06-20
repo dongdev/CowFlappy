@@ -1,4 +1,5 @@
 var that;
+var yBonus = 0;
 var SceneGame = {
 
     //TODO:MOVE
@@ -80,17 +81,19 @@ var SceneGame = {
     //TODO: check collide
     collide_meat: function () {
         dgame.physics.arcade.collide(dgame.player, dgame.meats, function (player, meat) {
+            that.move_bonus(meat.x + meat.width / 2, meat.y - meat.height / 2)
             meat.kill();
             dgame.score += 1;
             dgame.player.body.velocity.x = 0;
             soundCoin();
+
         }, null, dgame);
 
         dgame.physics.arcade.collide(dgame.player, dgame.meats_right, function (player, meat) {
+            that.move_bonus(meat.x + meat.width / 2, meat.y - meat.height / 2);
             meat.kill();
             dgame.score += 2;
             dgame.player.body.velocity.x = 0;
-            soundCoin();
         }, null, dgame);
     }
     ,
@@ -250,6 +253,12 @@ var SceneGame = {
         dgame.txt_score = dgame.add.text(GAME_WIDTH / 2, 60, SCORE + dgame.score, FONT);
         dgame.txt_score.anchor.setTo(0.5, 0.5);
 
+        //image bonus
+        yBonus = GAME_HEIGHT / 3;
+        dgame.img_bonus = dgame.add.sprite(GAME_WIDTH / 2 - dgame.cache.getImage("bonus").width / 2, yBonus, "bonus");
+        dgame.img_bonus.anchor.setTo(0.5, 1);
+        dgame.img_bonus.visible = false;
+
         //handler touch
         dgame.input.onDown.add(that.jump, dgame);
         //dgame.input.maxPointers = 2;
@@ -258,6 +267,26 @@ var SceneGame = {
         soundBg();
         removeMenuAsset();
         loadRourceEndGame();
+    },
+    move_bonus: function (x, y) {
+        dgame.img_bonus.x = x;
+        var t = 2000;
+
+        if (dgame.img_bonus.y === yBonus) {
+            dgame.img_bonus.y = y;
+            dgame.img_bonus.visible = true;
+            dgame.add.tween(dgame.img_bonus).to({
+                x: GAME_WIDTH / 2,
+                y: 0,
+            }, t, Phaser.Easing.Linear.None, true);
+            var tween = dgame.add.tween(dgame.img_bonus.scale).to({x: 0.3, y: 0.3}, t, Phaser.Easing.Linear.None, true);
+            tween.onComplete.add(function () {
+                dgame.img_bonus.y = yBonus;
+                dgame.img_bonus.scale.x = 1;
+                dgame.img_bonus.scale.y = 1;
+                dgame.img_bonus.visible = false;
+            }, this)
+        }
     }
     ,
     update: function (delta) {
@@ -305,20 +334,7 @@ var SceneGame = {
                     "avatar": playerPic == null ? "" : playerPic,
                     "source": source
                 });
-                DSocket(pack, function (ev) {
-                    var data = JSON.parse(ev.data);
-                    sessionId = data.session_id;
-                    log("sessionId:" + sessionId);
-                });
-                dgame.load.onFileComplete.add(function (progress, file_key, success, total_loaded_files, total_files) {
-                    if (!success)
-                        return;
-                    if (file_key.includes("start_json")) {
-                        sessionId = dgame.cache.getJSON("start_json").session_id;
-                        log(sessionId);
-                    }
-                });
-                dgame.load.start();
+                sendMs(pack);
             }
             return;
         }

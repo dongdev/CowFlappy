@@ -1,38 +1,157 @@
-function DSocket(pack, callback) {
+function socketIO(pack) {
 
     if ("WebSocket" in window) {
-        console.log("WebSocket is supported by your Browser!");
-
-        // Let us open a web socket
-        // var ws = new WebSocket("wss://bongda.vnnplus.vn:8443/one2many");
-        var ws = new WebSocket("wss://icod.mobi:8443/");
+        //ws = new WebSocket("wss://bongda.vnnplus.vn:8443/one2many");
+        //ws = new WebSocket("wss://icod.mobi:8443/");
+        ws = new WebSocket("ws://icod.mobi:8445/");
         ws.onopen = function () {
-            // Web Socket is connected, send data using send()
-            ws.send(pack);
-            var ms = "Sent:" + pack;
+            var ms = "Socket Open";
             console.log(ms);
+            sendMs(JSON.stringify({'id': 'ping'}))
+            if (pack != null) {
+                sendMs(pack);
+            }
+            //pingpong
+            interval = setInterval("sendMs(JSON.stringify({'id':'ping'}))", 30000);
+
             $("p").text(ms);
         };
 
         ws.onmessage = function (evt) {
-            var received_msg = evt.data;
-            console.log("Received:" + evt.data);
             callback(evt);
-            ws.close();
+            console.log("Received:" + evt.data);
             $("p").text(evt.data);
         };
 
         ws.onclose = function () {
-            // websocket is closed.
+            ws = null;
+            clearInterval(interval);
             console.log("Closed.");
         };
+        ws.onerror = function () {
+            console.log("Error.");
+            ws = null;
+        }
 
     } else {
-
-        // The browser doesn't support WebSocket
         var ms = "WebSocket NOT supported by your Browser!";
         console.log(ms);
         $("p").text(ms);
+    }
+}
+
+var interval;
+//ranking data;
+var ws;
+var jTopRank;
+var panelBoxRank;
+var panelParentBoxRank;
+var pageRankSize = 4;
+
+//endgame data
+var panelBoxEndGame;
+
+//gift
+var textGift;
+
+//cart
+var jVouchers;
+var panelBoxVoucher;
+var panelParentBoxVoucher;
+var pageCartSize = 8;
+
+function callback(ev) {
+    var id = JSON.parse(ev.data).id;
+    switch (id) {
+        case "fc_gamestartResponse":
+        {
+            var jRoot = JSON.parse(ev.data);
+            sessionId = jRoot.session_id;
+            log("sessionId:" + sessionId);
+            break;
+        }
+        case "fc_getTopResponse":
+        {
+            log("fc_getTopResponse_ui");
+            var jRoot = JSON.parse(ev.data);
+            var top = jRoot.top;
+            jTopRank = top;
+            panelBoxRank = dgame.add.group();
+            panelParentBoxRank.add(panelBoxRank);
+            bindRank(top, 0, pageRankSize, panelBoxRank);
+            break;
+        }
+        case "fc_gameendResponse":
+        {
+            //size of frame 200x244
+            var x1 = 172;
+            var x2 = 432;
+            var x3 = 724;
+            var y = 1596;
+            var key_ava = "end_ava_key";
+
+            var jRoot = JSON.parse(ev.data)
+            var top = jRoot.top;
+            top.forEach(function (p1, p2, p3) {
+                if (p2 < 3) {
+                    //var avatar = "http://phaser.io/images/img.png";
+                    var avatar = p1.avatar;
+                    if (avatar == null || avatar.includes("null")) {
+                        count += 1;
+                    }
+                    else {
+                        var rand = dgame.rnd.integerInRange(0, 36890);
+                        var regex = avatar.includes("?") ? "&v=" + rand : "?v=" + rand;
+                        dgame.load.image(key_ava + p2, avatar + regex, true);
+                        dgame.load.start();
+                    }
+                }
+            });
+            var count = 0;
+            dgame.load.onFileComplete.add(function (progress, file_key, success, total_loaded_files, total_files) {
+                if (file_key.includes(key_ava)) {
+                    count += 1;
+                    var pos = file_key.replace(key_ava, "");
+                    var ava_rank1 = dgame.add.sprite(pos == 0 ? x1 : pos == 1 ? x2 : x3, y, success ? file_key : "davatar");
+                    var cache_ava_rank1 = dgame.cache.getImage(success ? file_key : "davatar");
+                    ava_rank1.scale.setTo(200 / cache_ava_rank1.width, 244 / cache_ava_rank1.height);
+                    panelBoxEndGame.add(ava_rank1);
+                    if (count == 3) {
+                        var endgame_bg_rank1 = dgame.add.sprite(87, 1536, "endgame_bg_rank");
+                        panelBoxEndGame.add(endgame_bg_rank1);
+                    }
+                }
+            });
+            break;
+        }
+        case "fc_getRewardsResponse":
+        {
+            var jRoot = JSON.parse(ev.data);
+            var vouchers = jRoot.vouchers;
+            if (vouchers != null && vouchers.length > 0)
+                textGift.setText("E-Coupon " + vouchers[0].code);
+            break;
+        }
+        case "fc_getMyRewardsResponse":
+        {
+            var jRoot = JSON.parse(ev.data);
+            var vouchers = jRoot.rewards;
+            jVouchers = vouchers;
+            panelBoxVoucher = dgame.add.group();
+            panelParentBoxVoucher.add(panelBoxVoucher);
+            bindCart(vouchers, 0, pageCartSize, panelBoxVoucher);
+            break;
+        }
+    }
+}
+function sendMs(pack) {
+    if (ws == null) {
+        //ws = initSocket(pack);
+        log("Websocket not exist!!!");
+    }
+    else {
+        ws.send(pack);
+        log("Sent:" + pack);
     }
 }
 
