@@ -22,21 +22,27 @@ function boxEndGame(score) {
         soundBg();
     }, this, 1, 0, 1, 0);
     var btShare = dgame.add.button(303, 1021, 'endgame_share', function () {
-        if (dgame.FBInstant != null) {
-            //intent can be "INVITE", "REQUEST", "CHALLENGE" or "SHARE"
-            var myImg = playerPic == null ? '' : window.btoa(playerPic);
-            log(myImg);
-            // FBInstant.shareAsync({
-            //     intent: 'INVITE',
-            //     image: "https%3A//scontent.fhan2-3.fna.fbcdn.net/v/t1.0-1/p320x320/23434885_1488621997890318_690721878521796166_n.jpg%3F_nc_cat%3D0%26oh%3D7e09e834e20abb8e1695354baed14a00%26oe%3D5BB5A317",
-            //     text: 'Nào hãy chơi game cùng mình nhé!',
-            //     data: {'': '...'},
-            // }).then(function () {
-            //     // continue with the game.
-            //     log("share callback")
-            // });
-            dgame.FBInstant.context.chooseAsync();
+        if (isFNInstant) {
+            if (dgame.FBInstant != null) {
+                //intent can be "INVITE", "REQUEST", "CHALLENGE" or "SHARE"
+                var myImg = playerPic == null ? '' : window.btoa(playerPic);
+                log(myImg);
+                // FBInstant.shareAsync({
+                //     intent: 'INVITE',
+                //     image: "https%3A//scontent.fhan2-3.fna.fbcdn.net/v/t1.0-1/p320x320/23434885_1488621997890318_690721878521796166_n.jpg%3F_nc_cat%3D0%26oh%3D7e09e834e20abb8e1695354baed14a00%26oe%3D5BB5A317",
+                //     text: 'Nào hãy chơi game cùng mình nhé!',
+                //     data: {'': '...'},
+                // }).then(function () {
+                //     // continue with the game.
+                //     log("share callback")
+                // });
+                dgame.FBInstant.context.chooseAsync();
+            }
         }
+        else {
+            shareFb();
+        }
+
         soundClick();
     }, this, 1, 0, 1, 0);
     var btGift = dgame.add.button(285, 1146, 'endgame_gift', function () {
@@ -188,7 +194,7 @@ function bindCart(arr, page, page_size, box) {
     box.callAll("kill");
 
     arr.forEach(function (p1, pos, p3) {
-        log("foreach:"+p1.code);
+        log("foreach:" + p1.code);
         if (pos >= page * page_size && pos < (page + 1) * page_size) {
             var text = dgame.add.text(0, 0, p1.code, style_rank2);
             text.setTextBounds(x, y + h * (pos - page * page_size), w, h);

@@ -11,7 +11,7 @@ var SCENE_LOGIN = "login";
 //var
 //var GAME_WIDTH = window.innerWidth;
 //var GAME_HEIGHT = window.innerHeight;
-var isFNInstant = true;
+var isFNInstant = false;
 var DEBUG = false;
 var SOURCE = ["fbm", "gstand"];
 var GAME_WIDTH = 1080;

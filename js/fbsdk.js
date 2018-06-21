@@ -6,9 +6,7 @@ function initFBSdk() {
             xfbml: true,
             version: 'v3.0'
         });
-        startGame(null);
     };
-
     (function (d, s, id) {
         var js, fjs = d.getElementsByTagName(s)[0];
         if (d.getElementById(id)) {
@@ -62,5 +60,19 @@ function loginFb() {
             alert(LOGIN_FAIL)
         }
     }, {scope: 'email,user_likes'});
+}
+
+function shareFb()
+{
+    FB.ui({
+        method: 'share_open_graph',
+        action_type: 'og.likes',
+        action_properties: JSON.stringify({
+            object:'https://developers.facebook.com/docs/javascript/examples',
+        })
+    }, function(response){
+        // Debug response (optional)
+        console.log(response);
+    });
 }
 
