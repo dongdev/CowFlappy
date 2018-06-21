@@ -1,4 +1,4 @@
-var style = {font: "bold 80px mijas", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle"};
+var style_score = {font: "bold 80px mijas", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle"};
 var style_rank1 = {font: "bold 65px mijas", fill: "#ffffff", boundsAlignH: "center", boundsAlignV: "middle"};
 var style_rank2 = {font: "bold 45px mijas", fill: "#ffffff", boundsAlignH: "center", boundsAlignV: "middle"};
 function boxEndGame(score) {
@@ -8,7 +8,7 @@ function boxEndGame(score) {
     dgame.dialogEndShow = true;
     var box = dgame.add.group();
     var bg = dgame.add.sprite(0, 0, "endgame_bg")
-    var text = dgame.add.text(0, 0, score + " ĐIỂM", style);
+    var text = dgame.add.text(0, 0, score + " ĐIỂM", style_score);
     text.setShadow(3, 3, 'rgba(0,0,0,0.5)', 2);
     text.setTextBounds(210, 714, 640, 147);
     //share

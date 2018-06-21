@@ -10,9 +10,15 @@ var Login = {
         dgame.physics.startSystem(Phaser.Physics.ARCADE);
         dgame.add.sprite(0, 0, "login_bg");
 
-        var style = {font: "bold 44px mijas", fill: "#ea252a", boundsAlignH: "center", boundsAlignV: "middle"};
-        dgame.textMsg = dgame.add.text(0, 0, "", style);
-        dgame.textMsg.setTextBounds(0, 906, GAME_WIDTH, 54);
+        var style = {
+            font: "bold 44px mijas",
+            fill: "#ea252a",
+            wordWrap: true,
+            wordWrapWidth: GAME_WIDTH,
+            align: "center"
+        };
+        dgame.textMsg = dgame.add.text(GAME_WIDTH / 2, 936, "", style);
+        dgame.textMsg.anchor.setTo(0.5);
 
         dgame.add.button(369, 982, "sign_bt", function () {
             soundClick();
@@ -48,7 +54,7 @@ var Login = {
 
         dgame.add.button(243, 1200, "sign_fb_bt", function () {
             soundClick();
-            checkLoginFB();
+            loginFb();
             //var text = prompt("Input text here !!!");
             //log(text);
         }, this, 1, 0, 1, 0);

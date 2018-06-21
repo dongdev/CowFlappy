@@ -6,6 +6,7 @@ function initFBSdk() {
             xfbml: true,
             version: 'v3.0'
         });
+        checkLoginFB();
     };
     (function (d, s, id) {
         var js, fjs = d.getElementsByTagName(s)[0];
@@ -28,13 +29,11 @@ function checkLoginFB() {
             // and signed request each expire
             var uid = response.authResponse.userID;
             var accessToken = response.authResponse.accessToken;
-            loginFb();
+            log(CONNECTED);
         } else if (response.status === 'not_authorized') {
             log(NOT_LOGIN);
-            loginFb();
         } else {
             log(ERROR);
-            alert(ERROR)
         }
     });
 }
@@ -57,7 +56,7 @@ function loginFb() {
                 dgame.state.start(SCENE_MENU);
             });
         } else {
-            alert(LOGIN_FAIL)
+            log(LOGIN_FAIL)
         }
     }, {scope: 'email,user_likes'});
 }
