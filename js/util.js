@@ -12,18 +12,19 @@ var SCENE_LOGIN = "login";
 
 //TODO: Save
 var UID = "fc_id";
-var UNAME ="fc_name"
+var UNAME = "fc_name"
 //var
 //var GAME_WIDTH = window.innerWidth;
 //var GAME_HEIGHT = window.innerHeight;
 var isFNInstant = false;
 var DEBUG = false;
+var LOG = true;
 var SOURCE = ["fbm", "gstand"];
 var GAME_WIDTH = 1080;
 var GAME_HEIGHT = 1920;
 var OPENING = 600;//524
 var GAME_ID = 'game-canvas';
-var GAME_ID2 = 'game-canvas';//asd
+var GAME_ID2 = 'game-canvas';//asd//
 var BACKGROUND_STEP = 2;
 var CLOUD_STEP = 2;
 var BOTTOM_STEP = 4;
@@ -50,7 +51,8 @@ var FONT = {
 };
 
 function log(msg) {
-    console.log(msg);
+    if (LOG)
+        console.log(msg);
 }
 
 function validateEmail(email) {
@@ -60,5 +62,10 @@ function validateEmail(email) {
 function validatePhone(phone) {
     var re = /[0][0-9]{9,10}/;
     return re.test(phone);
+}
+function scaleGame()
+{
+    dgame.scale.pageAlignHorizontally = true;
+    dgame.scale.scaleMode = isFNInstant ?  Phaser.ScaleManager.EXACT_FIT :  Phaser.ScaleManager.SHOW_ALL;
 }
 

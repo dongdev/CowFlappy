@@ -1,7 +1,6 @@
 var Menu = {
     create: function () {
-        dgame.scale.pageAlignHorizontally = true;
-        dgame.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+        scaleGame();
         dgame.physics.startSystem(Phaser.Physics.ARCADE);
         dgame.add.sprite(0, 0, "menu_bg");
         dgame.add.sprite(96, 128, "menu_logo");

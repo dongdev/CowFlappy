@@ -2,11 +2,12 @@ var that;
 var Login = {
     preload: function () {
         that = this;
+
+
         loadResourceLogin();
     },
     create: function () {
-        dgame.scale.pageAlignHorizontally = true;
-        dgame.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+        scaleGame();
         dgame.physics.startSystem(Phaser.Physics.ARCADE);
         dgame.add.sprite(0, 0, "login_bg");
 
@@ -59,14 +60,12 @@ var Login = {
             //log(text);
         }, this, 1, 0, 1, 0);
 
-        //textbox 1 243x645 -> size 603x93
         dgame.myInput = that.createInput(243, 645, "Tên đăng nhập");
         //dgame.myInput.anchor.set(0.5);
         var name_old = localStorage.getItem(UNAME);
         dgame.myInput.canvasInput.value(name_old == null ? "" : name_old);
         dgame.myInput.canvasInput.focus();
 
-        //textbox 1 243x780-> size 603x93
         dgame.myInput2 = that.createInput(243, 780, "Email/số điện thoại");
         //dgame.myInput2.anchor.set(0.5);
         //dgame.myInput2.angle = -30;

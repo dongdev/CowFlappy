@@ -17,23 +17,23 @@ function socketIO(pack) {
 
         ws.onmessage = function (evt) {
             callback(evt);
-            console.log("Received:" + evt.data);
+            log("Received:" + evt.data);
             $("p").text(evt.data);
         };
 
         ws.onclose = function () {
             ws = null;
             clearInterval(interval);
-            console.log("Closed.");
+            log("Closed.");
         };
         ws.onerror = function () {
-            console.log("Error.");
+            log("Error.");
             ws = null;
         }
 
     } else {
         var ms = "WebSocket NOT supported by your Browser!";
-        console.log(ms);
+        log(ms);
         $("p").text(ms);
     }
 }

@@ -195,8 +195,7 @@ var SceneGame = {
 
     create: function () {
         //init physics
-        dgame.scale.pageAlignHorizontally = true;
-        dgame.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+        scaleGame();
         dgame.physics.startSystem(Phaser.Physics.ARCADE);
         dgame.physics.arcade.gravity.y = GAME_GRAVITY;
 

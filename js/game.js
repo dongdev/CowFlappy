@@ -8,8 +8,9 @@ var STATE = {
 var dgame;
 
 function startGame(FBInstant) {
+    //* window.devicePixelRatio
     dgame = new Phaser.Game(
-        GAME_WIDTH,
+        GAME_WIDTH ,
         GAME_HEIGHT,
         Phaser.CANVAS, // Phaser.AUTO,
         isFNInstant ? GAME_ID2 : GAME_ID,
