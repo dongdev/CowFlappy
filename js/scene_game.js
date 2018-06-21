@@ -351,7 +351,7 @@ var SceneGame = {
             return;
         }
         else if (dgame.PAUSE) {
-            pause_game();
+            that.pause_game();
             return;
         }
         dgame.player.body.velocity.y -= JET;
