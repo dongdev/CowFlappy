@@ -51,6 +51,7 @@ var panelBoxEndGame;
 
 //gift
 var textGift;
+var oldVoucher;
 
 //cart
 var jVouchers;
@@ -125,9 +126,26 @@ function callback(ev) {
         case "fc_getRewardsResponse":
         {
             var jRoot = JSON.parse(ev.data);
-            var vouchers = jRoot.vouchers;
-            if (vouchers != null && vouchers.length > 0)
-                textGift.setText("E-Coupon " + vouchers[0].code);
+            var status = jRoot.status;
+            if (status != -1 || (status == -1 && oldVoucher != null)) {
+                var vouchers = jRoot.vouchers;
+                if (status == -1)
+                    vouchers = oldVoucher;
+                else
+                    oldVoucher = vouchers;
+                var text = "";
+                if (vouchers != null && vouchers.length > 0) {
+                    vouchers.forEach(function (item, pos, arr) {
+                        if (pos == 0) {
+                            text += ("E-Coupon " + item.code);
+                        }
+                        else {
+                            text += "\n và " + item.code;
+                        }
+                    });
+                }
+                textGift.setText(text);
+            }
             break;
         }
         case "fc_getMyRewardsResponse":

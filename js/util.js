@@ -8,6 +8,10 @@ var SCENE_PRELOAD = "preload";
 var SCENE_MENU = "menu";
 var SCENE_GAME = "ingame";
 var SCENE_LOGIN = "login";
+
+//TODO: Save
+var UID = "fc_id";
+var UNAME ="fc_name"
 //var
 //var GAME_WIDTH = window.innerWidth;
 //var GAME_HEIGHT = window.innerHeight;

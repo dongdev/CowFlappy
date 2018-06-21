@@ -35,6 +35,8 @@ var Login = {
                 dgame.textMsg.setText("Số điện thoại không hợp lệ!");
                 return;
             }
+            localStorage.setItem(UID, inputId);
+            localStorage.setItem(UNAME, inputName);
             playerName = inputName;
             playerId = inputId;
             playerPic = null;
@@ -54,14 +56,16 @@ var Login = {
         //textbox 1 243x645 -> size 603x93
         dgame.myInput = that.createInput(243, 645, "Tên đăng nhập");
         //dgame.myInput.anchor.set(0.5);
-        dgame.myInput.canvasInput.value('');
+        var name_old = localStorage.getItem(UNAME);
+        dgame.myInput.canvasInput.value(name_old == null ? "" : name_old);
         dgame.myInput.canvasInput.focus();
 
         //textbox 1 243x780-> size 603x93
         dgame.myInput2 = that.createInput(243, 780, "Email/số điện thoại");
         //dgame.myInput2.anchor.set(0.5);
         //dgame.myInput2.angle = -30;
-        dgame.myInput2.canvasInput.value('');
+        var old_id = localStorage.getItem(UID);
+        dgame.myInput2.canvasInput.value(old_id == null ? "" : old_id);
 
         //sound
         dgame.bt_sound = dgame.add.sprite(32, 32, "bt_sound");

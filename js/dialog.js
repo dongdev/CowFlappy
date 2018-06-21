@@ -1,5 +1,4 @@
 var style = {font: "bold 80px mijas", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle"};
-var style_gift = {font: "bold 80px mijas", fill: "#f15858", boundsAlignH: "center", boundsAlignV: "middle"};
 var style_rank1 = {font: "bold 65px mijas", fill: "#ffffff", boundsAlignH: "center", boundsAlignV: "middle"};
 var style_rank2 = {font: "bold 45px mijas", fill: "#ffffff", boundsAlignH: "center", boundsAlignV: "middle"};
 function boxEndGame(score) {
@@ -104,9 +103,11 @@ function boxGift() {
         dgame.scrollText = null;
         soundClick();
     }, this, 0, 0, 0);
-    var text = dgame.add.text(0, 0, "", style_gift);
+    var style_gift = {font: "bold 60px mijas", fill: "#f15858", wordWrap: true, wordWrapWidth: GAME_WIDTH, align: "center"};
+    var text = dgame.add.text(GAME_WIDTH / 2, 658, "", style_gift);
     text.setShadow(3, 3, 'rgba(0,0,0,0.5)', 2);
-    text.setTextBounds(164, 623, 737, 54);
+    //text.setTextBounds(164, 623, 737, 80);//54
+    text.anchor.setTo(0.5);
     textGift = text;
 
     var imgText = dgame.add.sprite(237, 795, "gift_text");
