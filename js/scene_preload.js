@@ -100,13 +100,16 @@ function loadRourceEndGame() {
     dgame.load.spritesheet("endgame_replay", "assets/imgs/bt_choilai.png", 470, 93);
 }
 function loadSound() {
-    dgame.load.audio('bg', 'assets/snds/music_background.mp3');
-    dgame.load.audio('coin', 'assets/snds/coin.mp3');
-    dgame.load.audio('click', 'assets/snds/click.mp3');
-    dgame.load.audio('crash', 'assets/snds/crash.mp3');
-    dgame.load.audio('fall', 'assets/snds/fall.mp3');
-    dgame.load.audio('flap', 'assets/snds/flap.mp3');
-    dgame.load.audio('win', 'assets/snds/win.mp3');
+    var type = "mp3";
+    if (dgame.device.iOS || dgame.device.mobileSafari)
+        type = "m4a";
+    dgame.load.audio('bg', 'assets/snds/music_background.' + type);
+    dgame.load.audio('coin', 'assets/snds/coin.' + type);
+    dgame.load.audio('click', 'assets/snds/click.' + type);
+    dgame.load.audio('crash', 'assets/snds/crash.' + type);
+    dgame.load.audio('fall', 'assets/snds/fall.' + type);
+    dgame.load.audio('flap', 'assets/snds/flap.' + type);
+    dgame.load.audio('win', 'assets/snds/win.' + type);
 }
 function removeMenuAsset() {
     dgame.cache.removeImage("menu_bg");
