@@ -27,6 +27,7 @@ function soundCoin() {
         return;
     if (dgame.soundCoin == null) {
         var sound = dgame.add.audio('coin');
+        sound.allowMultiple = true;
         sound.play();
         dgame.soundCoin = sound;
     }
@@ -40,10 +41,12 @@ function soundJump() {
         return;
     if (dgame.soundJump == null) {
         var sound = dgame.add.audio('flap');
+        sound.allowMultiple = true;
         sound.play();
         dgame.soundJump = sound;
     }
     else {
+        dgame.soundJump.stop();
         dgame.soundJump.play();
     }
 }
@@ -52,6 +55,7 @@ function soundCrash() {
         return;
     if (dgame.soundCrash == null) {
         var sound = dgame.add.audio('crash');
+        sound.allowMultiple = true;
         sound.play();
         dgame.soundCrash = sound;
     }
@@ -64,6 +68,7 @@ function soundClick() {
         return;
     if (dgame.soundClick == null) {
         var sound = dgame.add.audio('click');
+        sound.allowMultiple = true;
         sound.play();
         dgame.soundClick = sound;
     }
@@ -76,6 +81,7 @@ function soundWin() {
         return;
     if (dgame.soundWin == null) {
         var sound = dgame.add.audio('win');
+        sound.allowMultiple = true;
         sound.play();
         dgame.soundWin = sound;
     }
@@ -88,6 +94,7 @@ function soundFall() {
         return;
     if (dgame.soundFall == null) {
         var sound = dgame.add.audio('fall');
+        sound.allowMultiple = true;
         sound.play();
         dgame.soundFall = sound;
     }

@@ -48,28 +48,26 @@ function boxEndGame(score) {
         boxGift();
         soundClick();
     }, this, 1, 0, 1, 0);
-
-    if (sessionId != null) {
-        var pack = JSON.stringify({
-            "id": "gameend",
-            "session_id": sessionId,
-            "points": score
-        });
-        panelBoxEndGame = box;
-        sendMs(pack);
-    }
-
     var endgame_bg_rank = dgame.add.sprite(87, 1536, "endgame_bg_rank");
+    panelBoxEndGame = box;
+
     box.add(bg);
     box.add(text);
     box.add(btReplay);
     box.add(btShare);
     box.add(btGift);
     box.add(endgame_bg_rank);
-
     dgame.boxEnd = box;
     pauseBg();
     soundWin();
+
+    if (sessionId != null) {
+        sendMs(JSON.stringify({
+            "id": "gameend",
+            "session_id": sessionId,
+            "points": score
+        }));
+    }
 }
 
 function boxRule() {
@@ -103,7 +101,13 @@ function boxGift() {
         dgame.scrollText = null;
         soundClick();
     }, this, 0, 0, 0);
-    var style_gift = {font: "bold 60px mijas", fill: "#f15858", wordWrap: true, wordWrapWidth: GAME_WIDTH, align: "center"};
+    var style_gift = {
+        font: "bold 60px mijas",
+        fill: "#f15858",
+        wordWrap: true,
+        wordWrapWidth: GAME_WIDTH,
+        align: "center"
+    };
     var text = dgame.add.text(GAME_WIDTH / 2, 658, "", style_gift);
     text.setShadow(3, 3, 'rgba(0,0,0,0.5)', 2);
     //text.setTextBounds(164, 623, 737, 80);//54
@@ -288,10 +292,10 @@ function bindRank(arr, page, page_size, box) {
         if (pos >= page * page_size && pos < (page + 1) * page_size) {
             var y = tx_y[pos - page * page_size].split("|");
             var player = arr[pos];
-            var text1 = dgame.add.text(tx_x, y[0], pos + 1, style_rank1);
+            var text1 = dgame.add.text(tx_x, parseInt(y[0]), pos + 1, style_rank1);
             text1.stroke = '#000000';
             text1.strokeThickness = 6;
-            var text2 = dgame.add.text(tx_x, y[1], player.display_name, style_rank2);
+            var text2 = dgame.add.text(tx_x, parseInt(y[1]), player.display_name, style_rank2);
             box.add(text1);
             box.add(text2);
 

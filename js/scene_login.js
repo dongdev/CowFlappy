@@ -2,8 +2,6 @@ var that;
 var Login = {
     preload: function () {
         that = this;
-
-
         loadResourceLogin();
     },
     create: function () {

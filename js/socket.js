@@ -16,8 +16,8 @@ function socketIO(pack) {
         };
 
         ws.onmessage = function (evt) {
-            callback(evt);
             log("Received:" + evt.data);
+            callback(evt);
             $("p").text(evt.data);
         };
 
@@ -91,25 +91,11 @@ function callback(ev) {
 
             var jRoot = JSON.parse(ev.data)
             var top = jRoot.top;
-            top.forEach(function (p1, p2, p3) {
-                if (p2 < 3) {
-                    //var avatar = "http://phaser.io/images/img.png";
-                    var avatar = p1.avatar;
-                    if (avatar == null || avatar.includes("null")) {
-                        count += 1;
-                    }
-                    else {
-                        var rand = dgame.rnd.integerInRange(0, 36890);
-                        var regex = avatar.includes("?") ? "&v=" + rand : "?v=" + rand;
-                        dgame.load.image(key_ava + p2, avatar + regex, true);
-                        dgame.load.start();
-                    }
-                }
-            });
             var count = 0;
             dgame.load.onFileComplete.add(function (progress, file_key, success, total_loaded_files, total_files) {
                 if (file_key.includes(key_ava)) {
                     count += 1;
+                    log("load done : " + file_key + success);
                     var pos = file_key.replace(key_ava, "");
                     var ava_rank1 = dgame.add.sprite(pos == 0 ? x1 : pos == 1 ? x2 : x3, y, success ? file_key : "davatar");
                     var cache_ava_rank1 = dgame.cache.getImage(success ? file_key : "davatar");
@@ -121,6 +107,22 @@ function callback(ev) {
                     }
                 }
             });
+            top.forEach(function (p1, p2, p3) {
+                try {
+                    if (p2 < 3) {
+                        var avatar = p1.avatar;
+                        log("load image : " + key_ava + p2);
+                        var rand = dgame.rnd.integerInRange(0, 36890);
+                        var regex = avatar.includes("?") ? "&v=" + rand : "?v=" + rand;
+                        dgame.load.image(key_ava + p2, avatar + regex, true);
+                        dgame.load.start();
+                    }
+                }
+                catch (e) {
+                    log(e);
+                }
+            });
+
             break;
         }
         case "fc_getRewardsResponse":

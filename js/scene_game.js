@@ -178,8 +178,8 @@ var SceneGame = {
     preload: function () {
         that = this;
         loadResourcePlay();
-    }
-    ,
+        loadRourceEndGame();
+    },
 
     render: function () {
         if (DEBUG) {
@@ -277,7 +277,6 @@ var SceneGame = {
 
         soundBg();
         removeMenuAsset();
-        loadRourceEndGame();
     },
     move_bonus: function (x, y) {
         dgame.img_bonus.x = x;
