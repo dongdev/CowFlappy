@@ -25,6 +25,8 @@ var GAME_HEIGHT = 1920;
 var OPENING = 600;//524
 var GAME_ID = 'game-canvas';
 var GAME_ID2 = 'game-canvas';//asd//
+var SHARE_URL = 'https://dongdev.github.io/flappycow/';//asd//
+var APP_ID = 1972872269694359;//asd//
 var BACKGROUND_STEP = 2;
 var CLOUD_STEP = 2;
 var BOTTOM_STEP = 4;
@@ -63,9 +65,8 @@ function validatePhone(phone) {
     var re = /[0][0-9]{9,10}/;
     return re.test(phone);
 }
-function scaleGame()
-{
+function scaleGame() {
     dgame.scale.pageAlignHorizontally = true;
-    dgame.scale.scaleMode = isFNInstant ?  Phaser.ScaleManager.EXACT_FIT :  Phaser.ScaleManager.SHOW_ALL;
+    dgame.scale.scaleMode = isFNInstant ? Phaser.ScaleManager.EXACT_FIT : Phaser.ScaleManager.SHOW_ALL;
 }
 
