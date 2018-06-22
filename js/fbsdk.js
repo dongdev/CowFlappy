@@ -1,7 +1,7 @@
 function initFBSdk() {
     window.fbAsyncInit = function () {
         FB.init({
-            appId: '1972872269694359',
+            appId: APP_ID,
             autoLogAppEvents: true,
             xfbml: true,
             version: 'v3.0'
@@ -22,11 +22,6 @@ function initFBSdk() {
 function checkLoginFB() {
     FB.getLoginStatus(function (response) {
         if (response.status === 'connected') {
-            // the user is logged in and has authenticated your
-            // app, and response.authResponse supplies
-            // the user's ID, a valid access token, a signed
-            // request, and the time the access token
-            // and signed request each expire
             var uid = response.authResponse.userID;
             var accessToken = response.authResponse.accessToken;
             log(CONNECTED);
@@ -58,19 +53,17 @@ function loginFb() {
         } else {
             log(LOGIN_FAIL)
         }
-    }, {scope: 'email,user_likes'});
+    }, {scope: 'email'});
 }
 
-function shareFb()
-{
+function shareFb() {
     FB.ui({
         method: 'share_open_graph',
         action_type: 'og.likes',
         action_properties: JSON.stringify({
-            object:'https://developers.facebook.com/docs/javascript/examples',
+            object: SHARE_URL,
         })
-    }, function(response){
-        // Debug response (optional)
+    }, function (response) {
         console.log(response);
     });
 }
