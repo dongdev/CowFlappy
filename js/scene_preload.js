@@ -101,8 +101,8 @@ function loadRourceEndGame() {
 }
 function loadSound() {
     var type = "mp3";
-    if (dgame.device.iOS || dgame.device.mobileSafari)
-        type = "m4a";
+    // if (dgame.device.iOS || dgame.device.mobileSafari)
+    //     type = "m4a";
     dgame.load.audio('bg', 'assets/snds/music_background.' + type);
     dgame.load.audio('coin', 'assets/snds/coin.' + type);
     dgame.load.audio('click', 'assets/snds/click.' + type);
