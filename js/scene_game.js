@@ -94,6 +94,7 @@ var SceneGame = {
             meat.kill();
             dgame.score += 2;
             dgame.player.body.velocity.x = 0;
+            soundCoin();
         }, null, dgame);
     }
     ,

@@ -32,6 +32,7 @@ function soundCoin() {
         dgame.soundCoin = sound;
     }
     else {
+        dgame.soundCoin.stop();
         dgame.soundCoin.play();
     }
 
@@ -60,6 +61,7 @@ function soundCrash() {
         dgame.soundCrash = sound;
     }
     else {
+        dgame.soundCrash.stop();
         dgame.soundCrash.play();
     }
 }
@@ -73,6 +75,7 @@ function soundClick() {
         dgame.soundClick = sound;
     }
     else {
+        dgame.soundClick.stop();
         dgame.soundClick.play();
     }
 }
@@ -86,6 +89,7 @@ function soundWin() {
         dgame.soundWin = sound;
     }
     else {
+        dgame.soundWin.stop();
         dgame.soundWin.play();
     }
 }
@@ -99,6 +103,7 @@ function soundFall() {
         dgame.soundFall = sound;
     }
     else {
+        dgame.soundFall.stop();
         dgame.soundFall.play();
     }
 }
