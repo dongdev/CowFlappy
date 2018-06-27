@@ -58,11 +58,8 @@ function loginFb() {
 
 function shareFb() {
     FB.ui({
-        method: 'share_open_graph',
-        action_type: 'og.likes',
-        action_properties: JSON.stringify({
-            object: SHARE_URL,
-        })
+        method: 'share',
+        href: SHARE_URL,
     }, function (response) {
         console.log(response);
     });

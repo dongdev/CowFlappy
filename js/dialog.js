@@ -8,17 +8,23 @@ function boxEndGame(score) {
     dgame.dialogEndShow = true;
     var box = dgame.add.group();
     var bg = dgame.add.sprite(0, 0, "endgame_bg")
+    bg.scale.setTo(2);
     var text = dgame.add.text(0, 0, score + " ĐIỂM", style_score);
     text.setShadow(3, 3, 'rgba(0,0,0,0.5)', 2);
     text.setTextBounds(210, 714, 640, 147);
     //share
+    var btClose = dgame.add.button(880,400,"bt_close", function () {
+        dgame.state.start(SCENE_MENU);
+        soundClick();
+    }, this);
     var btReplay = dgame.add.button(303, 900, 'endgame_replay', function () {
         dgame.boxEnd.destroy();
         dgame.boxEnd = null;
-        dgame.state.getCurrentState().restart_game();
         dgame.dialogEndShow = false;
-        soundClick();
+        dgame.state.getCurrentState().restart_game();
         soundBg();
+        soundClick();
+
     }, this, 1, 0, 1, 0);
     var btShare = dgame.add.button(303, 1021, 'endgame_share', function () {
         if (isFNInstant) {
@@ -52,6 +58,7 @@ function boxEndGame(score) {
     panelBoxEndGame = box;
 
     box.add(bg);
+    box.add(btClose);
     box.add(text);
     box.add(btReplay);
     box.add(btShare);
@@ -75,6 +82,7 @@ function boxRule() {
         return;
     var box = dgame.add.group();
     var bg = dgame.add.sprite(0, 0, "rule_bg");
+    bg.scale.setTo(2);
     var close = dgame.add.button(888, 456, "bt_close", function () {
         dgame.boxRule.destroy();
         dgame.boxRule = null;
@@ -91,6 +99,7 @@ function boxGift() {
         return;
     var box = dgame.add.group();
     var bg = dgame.add.sprite(0, 0, "gift_bg");
+    bg.scale.setTo(2);
     bg.inputEnabled = true;
     bg.events.onInputDown.add(function () {
 
@@ -148,6 +157,7 @@ function boxCartGift() {
         return;
     var box = dgame.add.group();
     var bg = dgame.add.sprite(0, 0, "cart_bg");
+    bg.scale.setTo(2);
     bg.inputEnabled = true;
     bg.events.onInputDown.add(function () {
 
@@ -215,6 +225,7 @@ function boxRank() {
         return;
     var box = dgame.add.group();
     var bg = dgame.add.sprite(0, 0, "rank_bg");
+    bg.scale.setTo(2);
     bg.inputEnabled = true;
     bg.events.onInputDown.add(function () {
 

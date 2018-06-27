@@ -131,7 +131,7 @@ var SceneGame = {
         dgame.meats.callAll("kill");
         dgame.meats_right.callAll("kill");
         dgame.walls.callAll("kill");
-        for (var i = 0; i < 5; i++) {
+        for (var i = 0; i < WALL_SIZE; i++) {
             that.spaw_wall();
         }
     }
@@ -201,16 +201,20 @@ var SceneGame = {
         dgame.physics.arcade.gravity.y = GAME_GRAVITY;
 
         //GAME.background = GAME.add.tileSprite(0,0,GAME.world.width, GAME.world.height,"bg");
-        dgame.add.sprite(0, 0, "bg");
+        var bg = dgame.add.sprite(0, 0, "bg");
+        bg.scale.setTo(2);
         dgame.bg_cloud = dgame.add.sprite(0, CLOUD_MARGIN_TOP, "bg_cloud");
+        dgame.bg_cloud.scale.setTo(2);
         dgame.sanvd = dgame.add.sprite(0, MEDIUM_MARGIN_TOP, "bg_san_vd");
         dgame.sanvd1 = dgame.add.sprite(dgame.cache.getImage("bg_san_vd").width, MEDIUM_MARGIN_TOP, "bg_san_vd");
+        dgame.sanvd.scale.setTo(2);
+        dgame.sanvd1.scale.setTo(2);
 
         //wall
         dgame.meats = dgame.add.group();
         dgame.meats_right = dgame.add.group();
         dgame.walls = dgame.add.group();
-        for (var i = 0; i < 5; i++) {
+        for (var i = 0; i < WALL_SIZE; i++) {
             that.spaw_wall();
         }
 

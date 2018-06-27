@@ -7,7 +7,8 @@ var Login = {
     create: function () {
         scaleGame();
         dgame.physics.startSystem(Phaser.Physics.ARCADE);
-        dgame.add.sprite(0, 0, "login_bg");
+        var bg = dgame.add.sprite(0, 0, "login_bg");
+        bg.scale.setTo(2);
 
         var style = {
             font: "bold 44px mijas",

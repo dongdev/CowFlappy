@@ -2,7 +2,8 @@ var Menu = {
     create: function () {
         scaleGame();
         dgame.physics.startSystem(Phaser.Physics.ARCADE);
-        dgame.add.sprite(0, 0, "menu_bg");
+        var bg = dgame.add.sprite(0, 0, "menu_bg");
+        bg.scale.setTo(2);
         dgame.add.sprite(96, 128, "menu_logo");
         var bt_play = dgame.add.button((GAME_WIDTH - dgame.cache.getImage("menu_play").width / 2 ) / 2, 1184, "menu_play", function () {
             dgame.state.start(SCENE_GAME);

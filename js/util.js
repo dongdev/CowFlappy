@@ -35,6 +35,7 @@ var WALL_MARGIN_LEFT = 370;
 var WALL_VELOCITY = 200;
 var WALL_VELOCITY_MAX = 200;
 var WALL_VELOCITY_MIN = 400;
+var WALL_SIZE = 3;
 //
 var playerName = null;
 var playerPic = null;

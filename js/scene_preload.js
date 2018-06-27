@@ -112,12 +112,12 @@ function loadSound() {
     dgame.load.audio('win', 'assets/snds/win.' + type);
 }
 function removeMenuAsset() {
-    dgame.cache.removeImage("menu_bg");
-    dgame.cache.removeImage("menu_logo");
-    dgame.cache.removeImage("menu_play");
-    dgame.cache.removeImage("menu_tutorial");
-    dgame.cache.removeImage("menu_gift");
-    dgame.cache.removeImage("menu_rank");
-    //RULE
-    dgame.cache.removeImage("rule_bg");
+    // dgame.cache.removeImage("menu_bg");
+    // dgame.cache.removeImage("menu_logo");
+    // dgame.cache.removeImage("menu_play");
+    // dgame.cache.removeImage("menu_tutorial");
+    // dgame.cache.removeImage("menu_gift");
+    // dgame.cache.removeImage("menu_rank");
+    // //RULE
+    // dgame.cache.removeImage("rule_bg");
 }
