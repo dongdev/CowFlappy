@@ -2,9 +2,11 @@ function canPlay() {
     //return dgame.playSound;
     return true;
 }
+
 function soundBg() {
     if (!canPlay())
         return;
+
     if (dgame.soundBg != null) {
         dgame.soundBg.stop();
         dgame.soundBg = null;
@@ -13,21 +15,21 @@ function soundBg() {
         dgame.soundWin.stop();
     }
     var sound = dgame.add.audio('bg', 1, true);
-    sound.allowMultiple = true;
     sound.loop = true;
     sound.play("", 0, 1, true);
     dgame.soundBg = sound;
 }
+
 function pauseBg() {
     if (dgame.soundBg != null)
         dgame.soundBg.stop();
 }
+
 function soundCoin() {
     if (!canPlay())
         return;
     if (dgame.soundCoin == null) {
         var sound = dgame.add.audio('coin');
-        sound.allowMultiple = true;
         sound.play();
         dgame.soundCoin = sound;
     }
@@ -37,12 +39,12 @@ function soundCoin() {
     }
 
 }
+
 function soundJump() {
     if (!canPlay())
         return;
     if (dgame.soundJump == null) {
         var sound = dgame.add.audio('flap');
-        sound.allowMultiple = true;
         sound.play();
         dgame.soundJump = sound;
     }
@@ -51,12 +53,12 @@ function soundJump() {
         dgame.soundJump.play();
     }
 }
+
 function soundCrash() {
     if (!canPlay())
         return;
     if (dgame.soundCrash == null) {
         var sound = dgame.add.audio('crash');
-        sound.allowMultiple = true;
         sound.play();
         dgame.soundCrash = sound;
     }
@@ -65,12 +67,13 @@ function soundCrash() {
         dgame.soundCrash.play();
     }
 }
+
 function soundClick() {
     if (!canPlay())
         return;
+    dgame.sound.context.resume();
     if (dgame.soundClick == null) {
         var sound = dgame.add.audio('click');
-        sound.allowMultiple = true;
         sound.play();
         dgame.soundClick = sound;
     }
@@ -78,13 +81,14 @@ function soundClick() {
         dgame.soundClick.stop();
         dgame.soundClick.play();
     }
+
 }
+
 function soundWin() {
     if (!canPlay())
         return;
     if (dgame.soundWin == null) {
         var sound = dgame.add.audio('win');
-        sound.allowMultiple = true;
         sound.play();
         dgame.soundWin = sound;
     }
@@ -93,12 +97,17 @@ function soundWin() {
         dgame.soundWin.play();
     }
 }
+
+function  pauseSoundWin() {
+    if(dgame.soundWin!= null)
+        dgame.soundWin.stop();
+}
+
 function soundFall() {
     if (!canPlay())
         return;
     if (dgame.soundFall == null) {
         var sound = dgame.add.audio('fall');
-        sound.allowMultiple = true;
         sound.play();
         dgame.soundFall = sound;
     }
@@ -107,6 +116,7 @@ function soundFall() {
         dgame.soundFall.play();
     }
 }
+
 function mute(mute) {
     dgame.sound.mute = mute;
 }

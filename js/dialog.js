@@ -1,6 +1,7 @@
 var style_score = {font: "bold 80px mijas", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle"};
 var style_rank1 = {font: "bold 65px mijas", fill: "#ffffff", boundsAlignH: "center", boundsAlignV: "middle"};
 var style_rank2 = {font: "bold 45px mijas", fill: "#ffffff", boundsAlignH: "center", boundsAlignV: "middle"};
+
 function boxEndGame(score) {
     if (dgame.boxEnd != null)
         return;
@@ -13,9 +14,13 @@ function boxEndGame(score) {
     text.setShadow(3, 3, 'rgba(0,0,0,0.5)', 2);
     text.setTextBounds(210, 714, 640, 147);
     //share
-    var btClose = dgame.add.button(880,400,"bt_close", function () {
+    var btClose = dgame.add.button(880, 400, "bt_close", function () {
+        dgame.boxEnd.destroy();
+        dgame.boxEnd = null;
+        dgame.dialogEndShow = false;
         dgame.state.start(SCENE_MENU);
         soundClick();
+        pauseSoundWin();
     }, this);
     var btReplay = dgame.add.button(303, 900, 'endgame_replay', function () {
         dgame.boxEnd.destroy();
@@ -51,9 +56,11 @@ function boxEndGame(score) {
         soundClick();
     }, this, 1, 0, 1, 0);
     var btGift = dgame.add.button(285, 1146, 'endgame_gift', function () {
-        boxGift();
-        soundClick();
-    }, this, 1, 0, 1, 0);
+        if (score > 0) {
+            boxGift();
+            soundClick();
+        }
+    }, this, score == 0 ? 2 : 1, score == 0 ? 2 : 0, score == 0 ? 2 : 1, score == 0 ? 2 : 0);
     var endgame_bg_rank = dgame.add.sprite(87, 1536, "endgame_bg_rank");
     panelBoxEndGame = box;
 

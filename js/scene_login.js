@@ -5,6 +5,10 @@ var Login = {
         loadResourceLogin();
     },
     create: function () {
+        dgame.input.onDown.addOnce(() => {
+            dgame.sound.context.resume();
+            dgame.sound.autoplay = false;
+        });
         scaleGame();
         dgame.physics.startSystem(Phaser.Physics.ARCADE);
         var bg = dgame.add.sprite(0, 0, "login_bg");

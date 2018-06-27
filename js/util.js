@@ -68,6 +68,7 @@ function validatePhone(phone) {
 }
 function scaleGame() {
     dgame.scale.pageAlignHorizontally = true;
-    dgame.scale.scaleMode = isFNInstant ? Phaser.ScaleManager.EXACT_FIT : Phaser.ScaleManager.SHOW_ALL;
+    //dgame.scale.scaleMode = isFNInstant ? Phaser.ScaleManager.EXACT_FIT : Phaser.ScaleManager.SHOW_ALL;
+    dgame.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
 }
 

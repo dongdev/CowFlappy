@@ -96,7 +96,7 @@ function loadRourceEndGame() {
     dgame.load.image("endgame_bg", "assets/imgs/endgame_bg.png");
     dgame.load.image("endgame_bg_rank", "assets/imgs/endgame_bg_rank.png");
     dgame.load.spritesheet("endgame_share", "assets/imgs/bt_share.png", 470, 93);
-    dgame.load.spritesheet("endgame_gift", "assets/imgs/bt_nhanqua.png", 515, 167);
+    dgame.load.spritesheet("endgame_gift", "assets/imgs/bt_nhanqua.png", 514, 170);
     dgame.load.spritesheet("endgame_replay", "assets/imgs/bt_choilai.png", 470, 93);
 }
 function loadSound() {
